@@ -5,27 +5,25 @@ import pandas as pd
 from prompts import sentence_extraction_prompt, field_extraction_prompt
 from utils import load_config, call_openai_api
 
-# 🔧 Print current working directory
+# Print current working dir
 print("📂 Current Working Directory:", os.getcwd())
 
-# 🔧 Set absolute output folder path
+# Ensure output folder exists
 output_dir = r"C:\Users\HariharaM12\PycharmProjects\PythonProject\output"
 os.makedirs(output_dir, exist_ok=True)
 
-# Output file paths
+# File paths
 sentence_output_file = os.path.join(output_dir, 'extracted_sentences.json')
 structured_output_file = os.path.join(output_dir, 'structured_data.json')
-mutation_output_file = os.path.join(output_dir, 'mutation_only_output.json')
 
-# Input
+# Load config
 openai_config = load_config()
 model = openai_config['gpt_models']['model_gpt4o']
 input_file = r"C:\Users\HariharaM12\Downloads\medicaldata.csv"
 
-# Results lists
+# Output lists
 sentence_results = []
 structured_results = []
-mutation_only_results = []
 
 def clean_json_response(response: str):
     """Clean JSON response from OpenAI API"""
@@ -35,35 +33,37 @@ def clean_json_response(response: str):
     cleaned = cleaned.replace('\n', ' ')
     return cleaned
 
-# Load input data
+# Load data
 df = pd.read_csv(input_file, encoding='utf-8')
+print(f"📄 Total rows to process: {len(df)}")
 
+# Loop through records
 for index, row in df.iterrows():
     title = row.get('title', "")
     text = row.get('text', "")
-    print(f"\n[Step 1] Analyzing Text: {title[:60]}...")
+    print(f"\n🔄 Processing: {title[:60]}")
 
     if not text:
         continue
 
-    # Step 1: Sentence Extraction
+    # Step 1: Extract relevant sentences
     prompt1 = sentence_extraction_prompt(title, text)
     extracted_sentences_json = call_openai_api(prompt1, model)
-    print("[🔍 Raw API Response Snippet]", extracted_sentences_json[:300])
 
     if not extracted_sentences_json:
+        print("⚠️ Empty sentence extraction response")
         continue
 
     cleaned_response = clean_json_response(extracted_sentences_json)
     try:
         extracted_sentences = json.loads(cleaned_response)
     except json.JSONDecodeError:
-        print("[⚠️ JSON Error] Sentence extraction failed")
+        print("⚠️ JSON decoding failed for sentence extraction")
         continue
 
     sentence_results.append(extracted_sentences)
 
-    # Step 2: Structured Extraction
+    # Step 2: Use extracted sentences to get structured data
     combined_text = ". ".join(
         extracted_sentences.get('aml_diagnosis_sentences', []) +
         extracted_sentences.get('precedent_disease_sentences', []) +
@@ -74,43 +74,31 @@ for index, row in df.iterrows():
     structured_data_json = call_openai_api(prompt2, model)
 
     if not structured_data_json:
+        print("⚠️ Empty structured data response")
         continue
 
     cleaned_structured_data_json = clean_json_response(structured_data_json)
     try:
         structured_data = json.loads(cleaned_structured_data_json)
     except json.JSONDecodeError:
-        print("[⚠️ JSON Error] Structured data parsing failed")
+        print("⚠️ JSON decoding failed for structured data")
         continue
 
     structured_data["document_title"] = title
     structured_results.append(structured_data)
 
-    # Mutation-only extraction
-    mutation_only_data = {
-        "document_title": title,
-        "mutational_status": structured_data.get("mutational_status", {})
-    }
-    mutation_only_results.append(mutation_only_data)
-
-# Save results
+# ✅ Save sentence output
 try:
     with open(sentence_output_file, 'w', encoding='utf-8') as f:
         json.dump(sentence_results, f, indent=4)
-    print(f"✅ Sentence results saved to: {sentence_output_file} ({len(sentence_results)} records)")
+    print(f"✅ Sentence results saved: {sentence_output_file} ({len(sentence_results)} records)")
 except Exception as e:
     print(f"❌ Failed to save sentence results: {e}")
 
+# ✅ Save structured output
 try:
     with open(structured_output_file, 'w', encoding='utf-8') as f:
         json.dump(structured_results, f, indent=4)
-    print(f"✅ Structured results saved to: {structured_output_file} ({len(structured_results)} records)")
+    print(f"✅ Structured results saved: {structured_output_file} ({len(structured_results)} records)")
 except Exception as e:
     print(f"❌ Failed to save structured results: {e}")
-
-try:
-    with open(mutation_output_file, 'w', encoding='utf-8') as f:
-        json.dump(mutation_only_results, f, indent=4)
-    print(f"✅ Mutation-only results saved to: {mutation_output_file} ({len(mutation_only_results)} records)")
-except Exception as e:
-    print(f"❌ Failed to save mutation-only results: {e}")
