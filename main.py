@@ -5,14 +5,24 @@ import pandas as pd
 from prompts import sentence_extraction_prompt, field_extraction_prompt
 from utils import load_config, call_openai_api
 
-# Configuration
+# 🔧 Print current working directory
+print("📂 Current Working Directory:", os.getcwd())
+
+# 🔧 Set absolute output folder path
+output_dir = r"C:\Users\HariharaM12\PycharmProjects\PythonProject\output"
+os.makedirs(output_dir, exist_ok=True)
+
+# Output file paths
+sentence_output_file = os.path.join(output_dir, 'extracted_sentences.json')
+structured_output_file = os.path.join(output_dir, 'structured_data.json')
+mutation_output_file = os.path.join(output_dir, 'mutation_only_output.json')
+
+# Input
 openai_config = load_config()
 model = openai_config['gpt_models']['model_gpt4o']
 input_file = r"C:\Users\HariharaM12\Downloads\medicaldata.csv"
-sentence_output_file = 'output/extracted_sentences.json'
-structured_output_file = 'output/structured_data.json'
-mutation_output_file = 'output/mutation_only_output.json'
 
+# Results lists
 sentence_results = []
 structured_results = []
 mutation_only_results = []
@@ -25,7 +35,7 @@ def clean_json_response(response: str):
     cleaned = cleaned.replace('\n', ' ')
     return cleaned
 
-# Read input data
+# Load input data
 df = pd.read_csv(input_file, encoding='utf-8')
 
 for index, row in df.iterrows():
@@ -76,17 +86,14 @@ for index, row in df.iterrows():
     structured_data["document_title"] = title
     structured_results.append(structured_data)
 
-    # Extract mutation-only portion and save
+    # Mutation-only extraction
     mutation_only_data = {
         "document_title": title,
         "mutational_status": structured_data.get("mutational_status", {})
     }
     mutation_only_results.append(mutation_only_data)
 
-# Ensure output directory exists
-os.makedirs("output", exist_ok=True)
-
-# Save sentence output
+# Save results
 try:
     with open(sentence_output_file, 'w', encoding='utf-8') as f:
         json.dump(sentence_results, f, indent=4)
@@ -94,7 +101,6 @@ try:
 except Exception as e:
     print(f"❌ Failed to save sentence results: {e}")
 
-# Save structured output
 try:
     with open(structured_output_file, 'w', encoding='utf-8') as f:
         json.dump(structured_results, f, indent=4)
@@ -102,7 +108,6 @@ try:
 except Exception as e:
     print(f"❌ Failed to save structured results: {e}")
 
-# Save mutation-only output
 try:
     with open(mutation_output_file, 'w', encoding='utf-8') as f:
         json.dump(mutation_only_results, f, indent=4)
