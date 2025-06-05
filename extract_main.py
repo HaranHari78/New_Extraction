@@ -5,14 +5,14 @@ import pandas as pd
 from mutation_prompt import mutation_extraction_prompt
 from utils import load_config, call_openai_api
 
-# Configuration
+# Config
 openai_config = load_config()
 model = openai_config['gpt_models']['model_gpt4o']
-input_file = r"C:\Users\HariharaM12\Downloads\medicaldata.csv"  # Update if needed
+input_file = r"C:\Users\HariharaM12\Downloads\medicaldata.csv"
 output_file = "output/mutational_status_only.json"
 results = []
 
-# Load input CSV
+# Load CSV
 df = pd.read_csv(input_file, encoding='utf-8')
 
 # Define pattern to check if patient note contains mutation-related content
@@ -23,17 +23,17 @@ for idx, row in df.iterrows():
     title = row["title"]
     text = row["text"]
 
-    # Skip rows that don't mention any of the mutation genes with possible mutation status
     if not re.search(pattern, text, re.IGNORECASE):
         continue
 
     print(f"🔍 Found mutation pattern in: {title[:60]}...")
 
-    # Prepare and call prompt
-    prompt = mutation_extraction_prompt(text)
+    # Pass index and title as ID + Name
+    prompt = mutation_extraction_prompt(text=text, patient_id=idx, name=title)
     response = call_openai_api(prompt, model)
 
     if not response:
+        print("⚠️ Empty response from API")
         continue
 
     try:
@@ -43,7 +43,6 @@ for idx, row in df.iterrows():
         print(f"[⚠️ JSON Error] {title}: {e}")
         continue
 
-    data["document_title"] = title
     results.append(data)
 
 # Save mutation-only output
