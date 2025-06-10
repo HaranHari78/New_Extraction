@@ -1,0 +1,67 @@
+def build_field_prompt(text: str) -> str:
+    return f"""
+You are extracting structured data from the following clinical sentences related to an AML cancer patient.
+
+If any fields are not mentioned in the text, return them with empty values or empty lists.
+
+Text:
+\"\"\"{text}\"\"\"
+
+Return this JSON format:
+{{
+  "aml_diagnosis_date": {{"value": "", "evidence": ""}},
+
+  "precedent_disease": [
+    {{"name": "", "date": "", "evidence": ""}}
+  ],
+
+  "performance_status": {{
+    "ecog_score": {{"value": "", "date": "", "evidence": ""}},
+    "kps_score": {{"value": "", "date": "", "evidence": ""}}
+  }},
+
+  "mutational_status": {{
+    "NPM1": {{"status": "", "date": "", "evidence": ""}},
+    "RUNX1": {{"status": "", "date": "", "evidence": ""}},
+    "TP53": {{"status": "", "date": "", "evidence": ""}},
+    "FLT3": {{"status": "", "date": "", "evidence": ""}},
+    "ASXL1": {{"status": "", "date": "", "evidence": ""}}
+  }},
+
+  "treatment_details": [
+    {{
+      "regimen": "",
+      "start_date": "",
+      "evidence": ""
+    }}
+  ],
+
+  "hospitalization_reason": {{
+    "symptoms": "",
+    "admission_date": "",
+    "evidence": ""
+  }},
+
+  "lab_results": [
+    {{
+      "test_name": "",
+      "value": "",
+      "date": "",
+      "evidence": ""
+    }}
+  ],
+
+  "genetic_mutations": [
+    {{
+      "gene": "",
+      "status": "",
+      "evidence": ""
+    }}
+  ],
+
+  "followup_plan": {{
+    "plan_summary": "",
+    "evidence": ""
+  }}
+}}
+"""
