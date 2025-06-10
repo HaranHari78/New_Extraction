@@ -1,0 +1,46 @@
+import json
+import os
+import pandas as pd
+from prompts import build_sentence_prompt
+from utils import call_openai_api, sanitize_json_response
+
+# Directory setup
+output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output_sentences"
+os.makedirs(output_dir, exist_ok=True)
+
+# Load dataset
+input_csv_path = r"C:\Users\HariharaM12\Downloads\medicaldata.csv"
+df = pd.read_csv(input_csv_path, encoding='utf-8')
+
+print(f"📄 Total rows found: {len(df)}")
+
+# Iterate through rows
+for idx, row in df.iterrows():
+    doc_title = row.get('title', "").replace(" ", "_")  # Clean filename
+    doc_text = row.get('text', "")
+
+    if not doc_text or not doc_title:
+        continue  # Skip empty rows
+
+    # Sentence Extraction
+    sentence_prompt = build_sentence_prompt(doc_text)
+    sentence_response = call_openai_api(sentence_prompt, model_name)
+
+    if not sentence_response:
+        print(f"Sentence extraction failed for {doc_title}.")
+        continue
+
+    cleaned_sentence_json = sanitize_json_response(sentence_response)
+
+    try:
+        sentence_data = json.loads(cleaned_sentence_json)
+        file_path = os.path.join(output_dir, f"{doc_title}.json")
+
+        # Save extracted sentences into individual files
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(sentence_data, f, indent=4)
+        
+        print(f"✅ Extracted sentences saved → {file_path}")
+    except json.JSONDecodeError:
+        print(f"❌ JSON parse error for {doc_title}")
+
