@@ -37,7 +37,7 @@ for idx, row in df.iterrows():
         continue
 
     print(f"\n🔍 Processing row {idx}")
-    prompt = sentence_extraction_prompt(text)
+    prompt = sentence_extraction_prompt(text)  # ✅ Only pass text
     raw_response = call_openai_api(prompt, model)
 
     if not raw_response:
@@ -47,7 +47,7 @@ for idx, row in df.iterrows():
     try:
         cleaned = clean_json_response(raw_response)
         extracted = json.loads(cleaned)
-        extracted['title'] = title  # Add the original title to the output
+        extracted['document_title'] = title  # ✅ Add title in output manually
         sentence_results.append(extracted)
     except Exception as e:
         print(f"⚠️ Failed to parse JSON for row {idx}: {e}")
