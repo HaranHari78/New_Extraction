@@ -1,2 +1,338 @@
-https://www.linkedin.com/posts/lumina-wang-685a60124_im-lost-in-rag-self-rag-agentic-activity-7336778085435879424-dblf?utm_source=share&utm_medium=member_android&rcm=ACoAAAv5d7MByA76rhntXhLELE6wdkn52SxXaB8
- 
+extracted_sentence.json
+
+[
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [
+            "1. Breast cancer. In September 2009, the patient had a lumpectomy in her right breast.",
+            "2. History of colon cancer, this was stage III. She had a colectomy in December 2005 and adjuvant chemotherapy and radiation.",
+            "4. Papillary thyroid carcinoma. This was in 2002. The patient was treated with thyroidectomy and radioactive iodine."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_41044_ Assessment & Plan Note_d79e7b504e"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "He underwent bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts) and was subsequently started on aza/ven on 1/5."
+        ],
+        "precedent_disease_sentences": [
+            "Creatinine was 1.4 on presentation, increased from 1.26 in 9/2020.",
+            "New as of early morning of 1/6."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [
+            "Prelim cytogenetic analysis is normal w/ molectular profile demonstrating:   DNMT3A R882C 44%  IDH1 R132G 41%   NPM1 Type A mutation 40%   NRAS G13R 40%"
+        ],
+        "document_title": "bfad7df253_44199_ Unmapped_189debb3b9"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Artie Mcintyre is a 59 y.o. male with hypertension who presented to Houston Urologic Surgicenter LLC with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+        ],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44201_ Unmapped_4f6ff4916a"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44202_ Unmapped_56a668e41c"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Jaylenn Altier is a 58 y.o. male with hypertension who presented to Parkview Hospital with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+        ],
+        "precedent_disease_sentences": [
+            "Jaylenn Altier is a 58 y.o. male with hypertension who presented to Parkview Hospital with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44202_ Unmapped_3848687338"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Dr. Kestler is a 64 year old man with hypertension who was admitted on 1/2 with fatigue and malaise and unfortunately found to have AML."
+        ],
+        "precedent_disease_sentences": [
+            "Dr. Kestler is a 64 year old man with hypertension who was admitted on 1/2 with fatigue and malaise."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44203_ Unmapped_892acccc6c"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Earvin Blazier is a 18 y.o. male with hypertension who presented to Redding Endoscopy Center with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy."
+        ],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44203_ Unmapped_5c9286489d"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44203_ Unmapped_819b9e2f9b"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44204_ Unmapped_0853593b2a"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Johaan Ryser is a 70 y.o. male with hypertension who presented to Endoscopy Center Of The Rockies LLC with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+        ],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44204_ Unmapped_11f52c582c"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Jearl Soto is a 51 y.o. male with hypertension who presented to Children'S Hospital Colorado At St Josephs Hosp with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy."
+        ],
+        "precedent_disease_sentences": [
+            "Past Medical History: Diagnosis Date Hypertension"
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44204_ Unmapped_6b1ebbf57c"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44205_ Unmapped_c8fb0a5ab8"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44205_ Unmapped_a100f98cd7"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Jeromie Gainor is a 65 y.o. male with hypertension who presented to Prospect Blackstone Valley Surgicare LLC Dba Blackstone Valley Surgicare with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+        ],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44205_ Unmapped_615747d795"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44206_ Unmapped_d1c8312294"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Ryzen Deady is a 73 y.o. male with hypertension who presented to Melbourne Surgery Center LLC with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+        ],
+        "precedent_disease_sentences": [
+            "Ryzen Deady is a 73 y.o. male with hypertension who presented to Melbourne Surgery Center LLC with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "#AKI, resolved Cr continues to improve and down to 1.06 this AM",
+            "#AF/Aflutter New as of early morning of 1/6."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44206_ Unmapped_75e9873460"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44207_ Unmapped_b9580c29e7"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Jaylen Knope is a 50 y.o. male with hypertension who presented to Southwestern Medical Center with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+        ],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44207_ Unmapped_81692775f7"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Briefly, he is a 58 year old man with hypertension who was admitted on 1/2 with fatigue and malaise and unfortunately found to have AML."
+        ],
+        "precedent_disease_sentences": [
+            "Briefly, he is a 58 year old man with hypertension who was admitted on 1/2 with fatigue and malaise and unfortunately found to have AML.",
+            "Briefly, he is a 58 year old man with hypertension who was admitted on 1/2 with fatigue and malaise and unfortunately found to have AML."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44207_ Unmapped_be8df81626"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Issues related to hospitalization: new dx of AML started on aza/ven and new dx of Afib started on metoprolol 25mg TID",
+            "You were admitted to Loma Linda University Children's Hospital for a new diagnosis of AML",
+            "Follow-up Plan after discharge: Issues related to your hospitalization: you were newly diagnosed with Acute Myelocytic Leukemia (AML) and atrial fibrillation (afib) and started on treatments for both"
+        ],
+        "precedent_disease_sentences": [
+            "Creatinine was 1.4 on presentation, increased from 1.26 in 9/2020."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [
+            "Prelim cytogenetic analysis is normal w/ molectular profile demonstrating: DNMT3A R882C 44% IDH1 R132G 41% NPM1 Type A mutation 40% NRAS G13R 40%",
+            "NPM1, Quantitative Type A In process",
+            "NPM1, Quantitative Type A In process"
+        ],
+        "document_title": "bfad7df253_44207_ Unmapped_38f7b432b1"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [
+            "New dx CMML with new onset Afib."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44208_ Unmapped_581f63c6a7"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44208_ Unmapped_1db025911e"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Christohper Dube is a 34 y.o. year old with AML who was admitted to the Magnolia Regional Health Center and will receive their first cycle of chemotherapy."
+        ],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44208_ Unmapped_a62e22e9bc"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44209_ Unmapped_f79dab1bf4"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44210_ Unmapped_8612919ec2"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44210_ Unmapped_5021469ee5"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44210_ Unmapped_253923fcb3"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Acute myeloid leukemia not having achieved remission (CMS-HCC) 1/5/2021 Initial Diagnosis"
+        ],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44210_ Unmapped_87f89be92e"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Mr. Cam Dauphin is a 65 y.o. male with newly diagnosed AMLA s/p aza/ven induction, who is seen in clinic following inpatient discharge for coordination of transition of care.",
+            "Acute myeloid leukemia not having achieved remission (CMS-HCC) 1/5/2021 Initial Diagnosis"
+        ],
+        "precedent_disease_sentences": [
+            "Hypertension"
+        ],
+        "performance_status_sentences": [
+            "ECOG PS= 1"
+        ],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44210_ Unmapped_fe37014705"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44210_ Unmapped_cc334c33ed"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44211_ Unmapped_32f3d12f2d"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44211_ Unmapped_ac2160756e"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Tayshawn Purnell is a 74 y.o. gentleman with hx of AML on aza/ven C1D1 1/5 who called due to a 'bladder outlet obstruction.'"
+        ],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44214_ Unmapped_315472a899"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44214_ Unmapped_0d3d1d287a"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44214_ Unmapped_d5f4115bca"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44214_ Unmapped_baf14d1b81"
+    },
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44214_ Unmapped_c429ff81f7"
+    }
+]
