@@ -1,27 +1,45 @@
-def sentence_extraction_prompt(text: str):
+def build_sentence_prompt(text: str):
     return f"""
-You are an AI assistant helping extract clinically relevant information from medical notes for AML (acute myeloid leukemia) patients.
+You are analyzing a clinical document for an AML cancer patient.
+Extract all sentences that contain potential evidence for:
+1. AML Diagnosis Date
+2. Precedent Disease (with date)
+3. Performance Status (ECOG/KPS with dates)
+4. Mutational Status (NPM1, RUNX1, TP53, FLT3, ASXL1)
 
-From the following clinical note, extract **only the sentences** that provide clear evidence for:
+Text:
+{text}
 
-1. AML Diagnosis Date  
-2. Precedent Disease — any prior cancer/disease (mention date if available)  
-3. Performance Status — ECOG (0–4) or Karnofsky (KPS) scores (score and date)  
-4. Mutational Status — for genes: NPM1, RUNX1, TP53, FLT3, ASXL1
-
-📌 Instructions:
-- Extract only sentences relevant to the categories above
-- Be precise — don’t infer or summarize
-- If a category has no matching sentence, leave its list empty
-
-Return output as JSON:
+Return JSON like:
 {{
   "aml_diagnosis_sentences": [],
   "precedent_disease_sentences": [],
   "performance_status_sentences": [],
   "mutational_status_sentences": []
 }}
+"""
 
-Clinical Note:
-\"\"\"{text}\"\"\"
+def build_field_prompt(text: str):
+    return f"""
+Extract the following from the clinical note below. Return JSON only.
+
+Note:
+"""{text}"""
+
+Return:
+{{
+  "aml_diagnosis_date": {{"value": "", "evidence": ""}},
+  "precedent_disease": [{{"name": "", "date": "", "evidence": ""}}],
+  "performance_status": {{
+    "ecog_score": {{"value": "", "date": "", "evidence": ""}},
+    "kps_score": {{"value": "", "date": "", "evidence": ""}}
+  }},
+  "mutational_status": {{
+    "NPM1": {{"status": "", "date": "", "evidence": ""}},
+    "RUNX1": {{"status": "", "date": "", "evidence": ""}},
+    "TP53": {{"status": "", "date": "", "evidence": ""}},
+    "FLT3": {{"status": "", "date": "", "evidence": ""}},
+    "ASXL1": {{"status": "", "date": "", "evidence": ""}}
+  }}
+}}
 """
