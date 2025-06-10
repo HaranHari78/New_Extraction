@@ -6,7 +6,7 @@ from prompts import build_sentence_prompt, build_field_prompt
 from utils import load_config, call_openai_api
 
 # Create output directory
-output_dir = r"C:\Users\HariharaM12\PycharmProjects\Medical_Data\output"
+output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output"
 os.makedirs(output_dir, exist_ok=True)
 
 # File paths
@@ -37,7 +37,7 @@ structured_outputs = []
 for idx, row in df.iloc[:5].iterrows():
     doc_title = row.get('title', "")
     doc_text = row.get('text', "")
-    print(f"\n🔍 Processing: {doc_title[:60]}")
+    print(f"\n Processing: {doc_title[:60]}")
 
     if not doc_text:
         continue
@@ -47,7 +47,7 @@ for idx, row in df.iloc[:5].iterrows():
     sentence_response = call_openai_api(sentence_prompt, model_name)
 
     if not sentence_response:
-        print("⚠️ Sentence extraction failed.")
+        print("Sentence extraction failed.")
         continue
 
     cleaned_sentence_json = sanitize_json_response(sentence_response)
@@ -56,7 +56,7 @@ for idx, row in df.iloc[:5].iterrows():
         sentence_data["document_title"] = doc_title
         sentence_outputs.append(sentence_data)
     except json.JSONDecodeError:
-        print("⚠️ Sentence JSON parse error.")
+        print("Sentence JSON parse error.")
         continue
 
     # Prepare combined sentence text for field extraction
@@ -71,7 +71,7 @@ for idx, row in df.iloc[:5].iterrows():
     structured_response = call_openai_api(field_prompt, model_name)
 
     if not structured_response:
-        print("⚠️ Structured extraction failed.")
+        print("Structured extraction failed.")
         continue
 
     cleaned_structured_json = sanitize_json_response(structured_response)
@@ -80,16 +80,16 @@ for idx, row in df.iloc[:5].iterrows():
         structured_data["document_title"] = doc_title
         structured_outputs.append(structured_data)
     except json.JSONDecodeError:
-        print("⚠️ Structured JSON parse error.")
+        print("Structured JSON parse error.")
         continue
 
 # Save JSON files
 try:
     with open(sentence_output_path, 'w', encoding='utf-8') as f:
         json.dump(sentence_outputs, f, indent=4)
-    print(f"✅ Sentence results saved → {sentence_output_path}")
+    print(f"Sentence results saved → {sentence_output_path}")
 except Exception as e:
-    print(f"❌ Error saving sentence JSON: {e}")
+    print(f"Error saving sentence JSON: {e}")
 
 try:
     with open(structured_output_path, 'w', encoding='utf-8') as f:
