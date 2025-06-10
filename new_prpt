@@ -1,24 +1,21 @@
-def sentence_extraction_prompt(text: str, title: str):
+def sentence_extraction_prompt(text: str):
     return f"""
 You are an AI assistant helping extract clinically relevant information from medical notes for AML (acute myeloid leukemia) patients.
 
-Given the clinical note below, extract **only the sentences** that contain potential evidence for the following categories:
+From the following clinical note, extract **only the sentences** that provide clear evidence for:
 
 1. AML Diagnosis Date  
-2. Precedent Disease — any prior cancer/disease (with mention date if available)  
-3. Performance Status — ECOG (0–4) or Karnofsky (KPS) scores (with score and date)  
-4. Mutational Status — gene name + value + date, for these genes:  
-   - NPM1, RUNX1, TP53, FLT3, ASXL1
+2. Precedent Disease — any prior cancer/disease (mention date if available)  
+3. Performance Status — ECOG (0–4) or Karnofsky (KPS) scores (score and date)  
+4. Mutational Status — for genes: NPM1, RUNX1, TP53, FLT3, ASXL1
 
 📌 Instructions:
-- Return only the relevant sentences under each category (if found).
-- Do not infer; only extract if explicitly mentioned.
-- Leave the list empty if nothing is found for a category.
+- Extract only sentences relevant to the categories above
+- Be precise — don’t infer
+- If a category has no matching sentence, leave its list empty
 
-Return JSON in this format:
-
+Return output as JSON:
 {{
-  "document_title": "{title}",
   "aml_diagnosis_sentences": [],
   "precedent_disease_sentences": [],
   "performance_status_sentences": [],
