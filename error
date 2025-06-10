@@ -274,5 +274,5 @@ structured_data.json
 ]
 
 now now i made some changes in loop likw iloc[:50]
-bt these updates are not happening in output folder 
+bt these updates are not happening in output folder only the old results are there in the output folder  
 
