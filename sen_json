@@ -1,0 +1,14 @@
+[
+    {
+        "document_title": "bfad7df253_44202_ Unmapped_3848687338",
+        "aml_diagnosis_sentences": [
+            "Jaylenn Altier is a 58 y.o. male with hypertension who presented to Parkview Hospital with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+        ],
+        "precedent_disease_sentences": [
+            "Jaylenn Altier is a 58 y.o. male with hypertension who presented to Parkview Hospital with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": []
+    }
+]
