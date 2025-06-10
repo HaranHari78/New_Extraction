@@ -31,13 +31,12 @@ def clean_json_response(response: str):
 
 # Iterate and extract
 for idx, row in df.iterrows():
-    title = row.get('title', '')
     text = row.get('text', '')
     if not text:
         continue
 
     print(f"\n🔍 Processing row {idx}")
-    prompt = sentence_extraction_prompt(text)  # ✅ Only pass text
+    prompt = sentence_extraction_prompt(text)  # ✅ Pass only text
     raw_response = call_openai_api(prompt, model)
 
     if not raw_response:
@@ -47,7 +46,7 @@ for idx, row in df.iterrows():
     try:
         cleaned = clean_json_response(raw_response)
         extracted = json.loads(cleaned)
-        extracted['document_title'] = title  # ✅ Add title in output manually
+        extracted['document_title'] = row.get('title', '')  # ✅ Only for internal correlation
         sentence_results.append(extracted)
     except Exception as e:
         print(f"⚠️ Failed to parse JSON for row {idx}: {e}")
@@ -57,6 +56,6 @@ for idx, row in df.iterrows():
 try:
     with open(sentence_output_file, 'w', encoding='utf-8') as f:
         json.dump(sentence_results, f, indent=4)
-    print(f"✅ Sentence-only results saved: {sentence_output_file} ({len(sentence_results)} records)")
+    print(f"✅ Extracted sentences saved: {sentence_output_file} ({len(sentence_results)} records)")
 except Exception as e:
     print(f"❌ Failed to save results: {e}")
