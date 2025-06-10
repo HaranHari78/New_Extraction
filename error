@@ -4,3 +4,275 @@ Traceback (most recent call last):
 TypeError: sentence_extraction_prompt() missing 1 required positional argument: 'text'
 
 Process finished with exit code 1
+
+these are the files currently having in my output folder :
+
+extracted_sentence.json
+
+[
+    {
+        "aml_diagnosis_sentences": [],
+        "precedent_disease_sentences": [],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_41044_ Assessment & Plan Note_d79e7b504e"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "He underwent bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts) and was subsequently started on aza/ven on 1/5."
+        ],
+        "precedent_disease_sentences": [
+            "Creatinine was 1.4 on presentation, increased from 1.26 in 9/2020."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [
+            "Prelim cytogenetic analysis is normal w/ molectular profile demonstrating: DNMT3A R882C 44% IDH1 R132G 41% NPM1 Type A mutation 40% NRAS G13R 40%."
+        ],
+        "document_title": "bfad7df253_44199_ Unmapped_189debb3b9"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Artie Mcintyre is a 59 y.o. male with hypertension who presented to Houston Urologic Surgicenter LLC with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+        ],
+        "precedent_disease_sentences": [
+            "Artie Mcintyre is a 59 y.o. male with hypertension who presented to Houston Urologic Surgicenter LLC with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44201_ Unmapped_4f6ff4916a"
+    },
+    {
+        "aml_diagnosis_sentences": [
+            "Jaylenn Altier is a 58 y.o. male with hypertension who presented to Parkview Hospital with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
+            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+        ],
+        "precedent_disease_sentences": [
+            "Jaylenn Altier is a 58 y.o. male with hypertension who presented to Parkview Hospital with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy."
+        ],
+        "performance_status_sentences": [],
+        "mutational_status_sentences": [],
+        "document_title": "bfad7df253_44202_ Unmapped_3848687338"
+    }
+]
+
+structured_data.json
+
+[
+    {
+        "aml_diagnosis_date": {
+            "value": "",
+            "evidence": ""
+        },
+        "precedent_disease": [
+            {
+                "name": "",
+                "date": "",
+                "evidence": ""
+            }
+        ],
+        "performance_status": {
+            "ecog_score": {
+                "value": "",
+                "date": "",
+                "evidence": ""
+            },
+            "kps_score": {
+                "value": "",
+                "date": "",
+                "evidence": ""
+            }
+        },
+        "mutational_status": {
+            "NPM1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "RUNX1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "TP53": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "FLT3": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "ASXL1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            }
+        },
+        "document_title": "bfad7df253_41044_ Assessment & Plan Note_d79e7b504e"
+    },
+    {
+        "aml_diagnosis_date": {
+            "value": "1/4",
+            "evidence": "He underwent bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)"
+        },
+        "precedent_disease": [
+            {
+                "name": "AML with monocytic differentiation",
+                "date": "1/4",
+                "evidence": "He underwent bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)"
+            }
+        ],
+        "performance_status": {
+            "ecog_score": {
+                "value": "",
+                "date": "",
+                "evidence": ""
+            },
+            "kps_score": {
+                "value": "",
+                "date": "",
+                "evidence": ""
+            }
+        },
+        "mutational_status": {
+            "NPM1": {
+                "status": "Type A mutation 40%",
+                "date": "",
+                "evidence": "NPM1 Type A mutation 40%"
+            },
+            "RUNX1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "TP53": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "FLT3": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "ASXL1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            }
+        },
+        "document_title": "bfad7df253_44199_ Unmapped_189debb3b9"
+    },
+    {
+        "aml_diagnosis_date": {
+            "value": "1/4",
+            "evidence": "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation"
+        },
+        "precedent_disease": [
+            {
+                "name": "hypertension",
+                "date": "",
+                "evidence": "Artie Mcintyre is a 59 y.o. male with hypertension"
+            }
+        ],
+        "performance_status": {
+            "ecog_score": {
+                "value": "",
+                "date": "",
+                "evidence": ""
+            },
+            "kps_score": {
+                "value": "",
+                "date": "",
+                "evidence": ""
+            }
+        },
+        "mutational_status": {
+            "NPM1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "RUNX1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "TP53": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "FLT3": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "ASXL1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            }
+        },
+        "document_title": "bfad7df253_44201_ Unmapped_4f6ff4916a"
+    },
+    {
+        "aml_diagnosis_date": {
+            "value": "1/4",
+            "evidence": "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation"
+        },
+        "precedent_disease": [
+            {
+                "name": "hypertension",
+                "date": "",
+                "evidence": "Jaylenn Altier is a 58 y.o. male with hypertension"
+            }
+        ],
+        "performance_status": {
+            "ecog_score": {
+                "value": "",
+                "date": "",
+                "evidence": ""
+            },
+            "kps_score": {
+                "value": "",
+                "date": "",
+                "evidence": ""
+            }
+        },
+        "mutational_status": {
+            "NPM1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "RUNX1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "TP53": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "FLT3": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "ASXL1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            }
+        },
+        "document_title": "bfad7df253_44202_ Unmapped_3848687338"
+    }
+]
+
+now now i made some changes in loop likw iloc[:50]
+bt these updates are not happening in output folder 
+
