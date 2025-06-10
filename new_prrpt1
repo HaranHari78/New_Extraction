@@ -1,0 +1,30 @@
+def build_sentence_prompt(text: str):
+    return f"""
+You are analyzing a clinical document for an AML cancer patient.
+Extract all sentences that contain potential evidence for:
+1. **AML Diagnosis Date**
+2. **Precedent Disease (with date)**
+3. **Performance Status** (ECOG/KPS with dates)
+4. **Mutational Status** (NPM1, RUNX1, TP53, FLT3, ASXL1)
+5. **Treatment Details**
+6. **Reason for Hospitalization**
+7. **Lab Result References**
+8. **Admission & Discharge Plans**
+9. **Genetic Mutations Not Listed Above**
+
+Text:
+{text}
+
+Return JSON like:
+{{
+  "aml_diagnosis_sentences": [],
+  "precedent_disease_sentences": [],
+  "performance_status_sentences": [],
+  "mutational_status_sentences": [],
+  "treatment_sentences": [],
+  "hospitalization_reason_sentences": [],
+  "lab_result_sentences": [],
+  "admission_discharge_plan_sentences": [],
+  "genetic_mutations_sentences": []
+}}
+"""
