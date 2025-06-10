@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "C:\Users\HariharaM12\PycharmProjects\Medical_Data\new_main.py", line 40, in <module>
+    prompt = sentence_extraction_prompt(text)  # ✅ Only pass text
+TypeError: sentence_extraction_prompt() missing 1 required positional argument: 'text'
+
+Process finished with exit code 1
