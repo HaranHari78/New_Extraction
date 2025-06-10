@@ -1,0 +1,62 @@
+import json
+import os
+import re
+import pandas as pd
+from prompts import sentence_extraction_prompt
+from utils import load_config, call_openai_api
+
+# Load configuration
+openai_config = load_config()
+model = openai_config['gpt_models']['model_gpt4o']
+
+# File paths
+input_file = r"C:\Users\HariharaM12\Downloads\medicaldata.csv"
+output_dir = r"C:\Users\HariharaM12\PycharmProjects\Medical_Data\output"
+os.makedirs(output_dir, exist_ok=True)
+sentence_output_file = os.path.join(output_dir, 'only_extracted_sentences.json')
+
+# Load data
+df = pd.read_csv(input_file, encoding='utf-8')
+print(f"📄 Total rows: {len(df)}")
+
+# Store results
+sentence_results = []
+
+def clean_json_response(response: str):
+    if not response or not isinstance(response, str):
+        return ""
+    cleaned = re.sub(r'```(?:json)?\n?|\n?```', '', response).strip()
+    cleaned = cleaned.replace('\n', ' ')
+    return cleaned
+
+# Iterate and extract
+for idx, row in df.iterrows():
+    title = row.get('title', '')
+    text = row.get('text', '')
+    if not text:
+        continue
+
+    print(f"\n🔍 Processing row {idx}")
+    prompt = sentence_extraction_prompt(text)
+    raw_response = call_openai_api(prompt, model)
+
+    if not raw_response:
+        print("⚠️ Empty response from API")
+        continue
+
+    try:
+        cleaned = clean_json_response(raw_response)
+        extracted = json.loads(cleaned)
+        extracted['title'] = title  # Add the original title to the output
+        sentence_results.append(extracted)
+    except Exception as e:
+        print(f"⚠️ Failed to parse JSON for row {idx}: {e}")
+        continue
+
+# Save output
+try:
+    with open(sentence_output_file, 'w', encoding='utf-8') as f:
+        json.dump(sentence_results, f, indent=4)
+    print(f"✅ Sentence-only results saved: {sentence_output_file} ({len(sentence_results)} records)")
+except Exception as e:
+    print(f"❌ Failed to save results: {e}")
