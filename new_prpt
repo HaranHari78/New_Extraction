@@ -11,7 +11,7 @@ From the following clinical note, extract **only the sentences** that provide cl
 
 📌 Instructions:
 - Extract only sentences relevant to the categories above
-- Be precise — don’t infer
+- Be precise — don’t infer or summarize
 - If a category has no matching sentence, leave its list empty
 
 Return output as JSON:
