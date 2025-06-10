@@ -1,45 +1,34 @@
-def build_sentence_prompt(text: str):
+def build_sentence_prompt(text: str) -> str:
     return f"""
-You are analyzing a clinical document for an AML cancer patient.
-Extract all sentences that contain potential evidence for:
-1. AML Diagnosis Date
-2. Precedent Disease (with date)
-3. Performance Status (ECOG/KPS with dates)
-4. Mutational Status (NPM1, RUNX1, TP53, FLT3, ASXL1)
+You are analyzing a clinical note for an AML cancer patient.
 
-Text:
-{text}
+Extract and return only the sentences (verbatim from the text) that provide information for each of the following medical categories:
 
-Return JSON like:
+1. AML Diagnosis
+2. Precedent Disease (any prior cancer or comorbidity with date if present)
+3. Performance Status (ECOG or KPS, including scores or descriptions)
+4. Mutational Status (NPM1, RUNX1, TP53, FLT3, ASXL1, or others)
+5. Treatment Plans (e.g. chemotherapy, aza/ven, radiation, induction therapy)
+6. Hospitalization Reasons (symptoms or causes for admission like fever, fatigue)
+7. Lab Results (e.g. creatinine, WBC count, blasts %, etc.)
+8. Genetic Mutations (including IDH1, DNMT3A, NRAS, etc.)
+9. Discharge or Follow-up Plans (e.g. aftercare, coordination of care)
+10. General Diagnosis Summary (summarized diagnostic statements)
+
+Here is the clinical text:
+\"\"\"{text}\"\"\"
+
+Return JSON format only:
 {{
   "aml_diagnosis_sentences": [],
   "precedent_disease_sentences": [],
   "performance_status_sentences": [],
-  "mutational_status_sentences": []
-}}
-"""
-
-def build_field_prompt(text: str):
-    return f"""
-Extract the following from the clinical note below. Return JSON only.
-
-Note:
-"""{text}"""
-
-Return:
-{{
-  "aml_diagnosis_date": {{"value": "", "evidence": ""}},
-  "precedent_disease": [{{"name": "", "date": "", "evidence": ""}}],
-  "performance_status": {{
-    "ecog_score": {{"value": "", "date": "", "evidence": ""}},
-    "kps_score": {{"value": "", "date": "", "evidence": ""}}
-  }},
-  "mutational_status": {{
-    "NPM1": {{"status": "", "date": "", "evidence": ""}},
-    "RUNX1": {{"status": "", "date": "", "evidence": ""}},
-    "TP53": {{"status": "", "date": "", "evidence": ""}},
-    "FLT3": {{"status": "", "date": "", "evidence": ""}},
-    "ASXL1": {{"status": "", "date": "", "evidence": ""}}
-  }}
+  "mutational_status_sentences": [],
+  "treatment_sentences": [],
+  "hospitalization_reason_sentences": [],
+  "lab_result_sentences": [],
+  "genetic_mutations_sentences": [],
+  "admission_discharge_plan_sentences": [],
+  "diagnosis_summary_sentences": []
 }}
 """
