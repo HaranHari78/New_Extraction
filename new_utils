@@ -29,3 +29,10 @@ def call_openai_api(prompt: str, model_name: str):
     except Exception as e:
         print(f"❌ Error during API call: {e}")
         return ""
+def sanitize_json_response(raw_response: str):
+    """Removes Markdown formatting and extra whitespace from JSON responses."""
+    if not raw_response or not isinstance(raw_response, str):
+        return ""
+
+    cleaned = raw_response.replace("```json", "").replace("```", "").strip()
+    return cleaned.replace('\n', ' ')  # Ensure valid JSON formatting
