@@ -7,7 +7,8 @@ def load_config():
     config.read('config.ini')
     return config
 
-def call_openai_api(prompt, model):
+def call_openai_api(prompt: str, model_name: str):
+    """Sends prompt to Azure OpenAI and returns response content."""
     custom_http_client = httpx.Client(verify=False)
     openai_config = load_config()
 
@@ -21,18 +22,10 @@ def call_openai_api(prompt, model):
 
     try:
         response = openai_client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": f"{prompt}"}]
+            model=model_name,  # Now correctly passing model name
+            messages=[{"role": "user", "content": prompt}]
         )
         return response.choices[0].message.content
     except Exception as e:
-        print("❌ Error during API call:", e)
+        print(f"❌ Error during API call: {e}")
         return ""
-
-def sanitize_json_response(raw_response: str):
-    """Removes Markdown formatting and extra whitespace from JSON responses."""
-    if not raw_response or not isinstance(raw_response, str):
-        return ""
-
-    cleaned = raw_response.replace("```json", "").replace("```", "").strip()
-    return cleaned.replace('\n', ' ')  # Ensure valid JSON formatting
