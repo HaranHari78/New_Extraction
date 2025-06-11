@@ -6,18 +6,21 @@ from pathlib import Path
 # 🔹 Input folder (field-level JSON files)
 field_input_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields")
 
-# 🔹 Output folders
+# 🔹 Output folders for individual fields
 performance_output_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\performance_status_fields")
 mutation_output_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\mutational_status_fields")
+precedent_output_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\precedent_disease_fields")
 
+# 🔹 Create folders if they don’t exist
 os.makedirs(performance_output_dir, exist_ok=True)
 os.makedirs(mutation_output_dir, exist_ok=True)
+os.makedirs(precedent_output_dir, exist_ok=True)
 
-# 🔹 Helper: sanitize filenames
+# 🔹 Helper to clean up file names
 def sanitize_filename(name: str) -> str:
     return re.sub(r'[\\/*?:"<>|]', "_", name)
 
-# 🔁 Loop through each field JSON file
+# 🔁 Process each field file
 for filename in os.listdir(field_input_dir):
     if not filename.endswith(".json"):
         continue
@@ -37,20 +40,28 @@ for filename in os.listdir(field_input_dir):
     document_title = data.get("document_title", filename.replace(".json", ""))
     safe_filename = sanitize_filename(document_title) + ".json"
 
-    # ✅ Save performance_status field
+    # ✅ Save performance_status
     performance_data = {
         "document_title": document_title,
         "performance_status": data.get("performance_status", {})
     }
     with open(performance_output_dir / safe_filename, 'w', encoding='utf-8') as f:
         json.dump(performance_data, f, indent=4)
-    print(f"✅ Saved → {performance_output_dir / safe_filename}")
 
-    # ✅ Save mutational_status field
+    # ✅ Save mutational_status
     mutation_data = {
         "document_title": document_title,
         "mutational_status": data.get("mutational_status", {})
     }
     with open(mutation_output_dir / safe_filename, 'w', encoding='utf-8') as f:
         json.dump(mutation_data, f, indent=4)
-    print(f"✅ Saved → {mutation_output_dir / safe_filename}")
+
+    # ✅ Save precedent_disease
+    precedent_data = {
+        "document_title": document_title,
+        "precedent_disease": data.get("precedent_disease", [])
+    }
+    with open(precedent_output_dir / safe_filename, 'w', encoding='utf-8') as f:
+        json.dump(precedent_data, f, indent=4)
+
+    print(f"✅ Saved: {safe_filename}")
