@@ -19,3 +19,35 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 
 Process finished with exit code 1
 
+[
+    {
+        "document_title": "bfad7df253_44199_ Unmapped_189debb3b9",
+        "mutational_status": {
+            "NPM1": {
+                "status": "Type A mutation 40%",
+                "date": "",
+                "evidence": "Prelim cytogenetic analysis is normal w/ molectular profile demonstrating: NPM1 Type A mutation 40%."
+            },
+            "RUNX1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "TP53": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "FLT3": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "ASXL1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            }
+        }
+    }
+]
