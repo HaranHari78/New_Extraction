@@ -7,17 +7,7 @@ from utils import load_config, call_openai_api
 # Input: sentence files
 sentence_input_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
 # Output: structured fields per title
-sentence_input_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
-
-# Output for performance_status_sentences
-performance_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\performance_status_sentences"
-
-# Output for mutational_status_sentences
-mutation_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\mutational_status_sentences"
-
-os.makedirs(performance_output_dir, exist_ok=True)
-os.makedirs(mutation_output_dir, exist_ok=True)
-
+field_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields"
 os.makedirs(field_output_dir, exist_ok=True)
 
 # Load config and model
@@ -64,7 +54,7 @@ for filename in os.listdir(sentence_input_dir):
     combined_text = ". ".join(combined_sentences)
 
     if not combined_text.strip():
-        print(f"⚠️ Skipping empty combined text: {filename}")
+        print(f"Skipping empty combined text: {filename}")
         continue
 
     # Build and call prompt
@@ -72,7 +62,7 @@ for filename in os.listdir(sentence_input_dir):
     response = call_openai_api(prompt, model_name)
 
     if not response:
-        print(f"❌ No response from API for {filename}")
+        print(f" No response from API for {filename}")
         continue
 
     cleaned_response = sanitize_json_response(response)
@@ -81,7 +71,7 @@ for filename in os.listdir(sentence_input_dir):
         field_data = json.loads(cleaned_response)
         field_data["document_title"] = sentence_data.get("document_title", filename.replace(".json", ""))
     except json.JSONDecodeError:
-        print(f"⚠️ JSON parse error for: {filename}")
+        print(f" JSON parse error for: {filename}")
         continue
 
     # Save structured output per title
@@ -91,4 +81,4 @@ for filename in os.listdir(sentence_input_dir):
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(field_data, f, indent=4)
 
-    print(f"✅ Saved → {output_path}")
+    print(f" Saved → {output_path}")
