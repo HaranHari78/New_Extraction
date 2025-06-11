@@ -2,28 +2,26 @@ import os
 import json
 import re
 
-# 🔹 Input directory: All sentence-level JSON files
-input_dir r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
-# 🔹 Output folders
-# Output for performance_status_sentences
-performance_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\performance_status_sentences"
+# 🔹 Input: structured field JSON files
+field_input_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields"
 
-# Output for mutational_status_sentences
-mutation_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\mutational_status_sentences"
+# 🔹 Output folders for each structured block
+performance_field_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\performance_status_fields"
+mutation_field_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\mutational_status_fields"
 
-os.makedirs(performance_output_dir, exist_ok=True)
-os.makedirs(mutation_output_dir, exist_ok=True)
+os.makedirs(performance_field_output_dir, exist_ok=True)
+os.makedirs(mutation_field_output_dir, exist_ok=True)
 
 # 🔹 Helper: clean filenames
 def sanitize_filename(name: str) -> str:
     return re.sub(r'[\\/*?:"<>|]', "_", name)
 
-# 🔁 Process each file
-for filename in os.listdir(input_dir):
+# 🔁 Loop through all field files
+for filename in os.listdir(field_input_dir):
     if not filename.endswith(".json"):
         continue
 
-    input_path = os.path.join(input_dir, filename)
+    input_path = os.path.join(field_input_dir, filename)
 
     with open(input_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
@@ -31,20 +29,22 @@ for filename in os.listdir(input_dir):
     document_title = data.get("document_title", filename.replace(".json", ""))
     safe_filename = sanitize_filename(document_title) + ".json"
 
-    # ✅ Save performance_status_sentences
+    # ✅ Extract and save performance_status block
     performance_data = {
         "document_title": document_title,
-        "performance_status_sentences": data.get("performance_status_sentences", [])
+        "performance_status": data.get("performance_status", {})
     }
-    with open(os.path.join(performance_output_dir, safe_filename), 'w', encoding='utf-8') as f:
+    perf_output_path = os.path.join(performance_field_output_dir, safe_filename)
+    with open(perf_output_path, 'w', encoding='utf-8') as f:
         json.dump(performance_data, f, indent=4)
-    print(f"✅ Saved performance: {safe_filename}")
+    print(f"✅ Saved performance_status: {perf_output_path}")
 
-    # ✅ Save mutational_status_sentences
+    # ✅ Extract and save mutational_status block
     mutation_data = {
         "document_title": document_title,
-        "mutational_status_sentences": data.get("mutational_status_sentences", [])
+        "mutational_status": data.get("mutational_status", {})
     }
-    with open(os.path.join(mutation_output_dir, safe_filename), 'w', encoding='utf-8') as f:
+    mut_output_path = os.path.join(mutation_field_output_dir, safe_filename)
+    with open(mut_output_path, 'w', encoding='utf-8') as f:
         json.dump(mutation_data, f, indent=4)
-    print(f"✅ Saved mutation: {safe_filename}")
+    print(f"✅ Saved mutational_status: {mut_output_path}")
