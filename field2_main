@@ -1,82 +1,74 @@
 import os
 import json
 import re
-from pathlib import Path
+from prompts_field import build_field_prompt
+from utils import load_config, call_openai_api
 
-# Input folder (field-level JSON files)
-field_input_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields")
+# Input sentence JSONs and output dir
+sentence_input_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
+field_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields"
+os.makedirs(field_output_dir, exist_ok=True)
 
-# Output paths for combined files
-performance_output_path = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\combined_performance_status.json")
-mutation_output_path = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\combined_mutational_status.json")
-precedent_output_path = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\combined_precedent_disease.json")
+# Load config and model
+config = load_config()
+model_name = config['gpt_models']['model_gpt4o']
 
-# Helper to sanitize filenames
-def sanitize_filename(name: str) -> str:
-    return re.sub(r'[\\/*?:"<>|]', "_", name)
+# Clean OpenAI response
+def sanitize_json_response(raw_response: str):
+    if not raw_response or not isinstance(raw_response, str):
+        return ""
+    cleaned = re.sub(r'```(?:json)?\n?|\n?```', '', raw_response).strip()
+    return cleaned.replace('\n', ' ')
 
-# Containers for combined results
-performance_combined = []
-mutation_combined = []
-precedent_combined = []
+# Store all field-wise results
+field_outputs = {
+    "aml_diagnosis_date": [],
+    "precedent_disease": [],
+    "performance_status": [],
+    "mutational_status": [],
+    "treatment_details": [],
+    "hospitalization_reason": [],
+    "lab_results": [],
+    "genetic_mutations": [],
+    "followup_plan": []
+}
 
-# Loop through field files
-for filename in os.listdir(field_input_dir):
+# Process each sentence JSON
+for filename in sorted(os.listdir(sentence_input_dir)):
     if not filename.endswith(".json"):
         continue
 
-    input_path = field_input_dir / filename
-    try:
-        with open(input_path, 'r', encoding='utf-8') as f:
-            content = f.read().strip()
-        if not content:
-            continue
-        data = json.loads(content)
-    except Exception:
+    with open(os.path.join(sentence_input_dir, filename), 'r', encoding='utf-8') as f:
+        sentence_data = json.load(f)
+
+    doc_title = sentence_data.get("document_title", filename.replace(".json", ""))
+    prompt = build_field_prompt(sentence_data)
+    response = call_openai_api(prompt, model_name)
+    if not response:
         continue
 
-    title = data.get("document_title", filename.replace(".json", ""))
+    try:
+        field_data = json.loads(sanitize_json_response(response))
+    except json.JSONDecodeError:
+        print(f"⚠️ JSON decode failed for: {filename}")
+        continue
 
-    # ⬛ 1. Performance status (add only if any value/evidence exists)
-    perf = data.get("performance_status", {})
-    if perf.get("ecog_score", {}).get("value") or perf.get("ecog_score", {}).get("evidence") or \
-       perf.get("kps_score", {}).get("value") or perf.get("kps_score", {}).get("evidence"):
-        performance_combined.append({
-            "document_title": title,
-            "performance_status": {
-                k: v for k, v in perf.items() if any(v.values())
-            }
-        })
+    # Append only non-empty data per field
+    for field in field_outputs:
+        value = field_data.get(field)
+        if isinstance(value, dict):
+            if any(v for v in value.values() if isinstance(v, dict) or v):
+                field_outputs[field].append({"document_title": doc_title, field: {
+                    k: v for k, v in value.items() if isinstance(v, dict) and any(v.values())
+                }})
+        elif isinstance(value, list):
+            clean_items = [item for item in value if any(item.values())]
+            if clean_items:
+                field_outputs[field].append({"document_title": doc_title, field: clean_items})
 
-    # ⬛ 2. Mutational status (filter out empty gene data)
-    mutations = data.get("mutational_status", {})
-    filtered_mutations = {
-        gene: info for gene, info in mutations.items()
-        if any(info.values())
-    }
-    if filtered_mutations:
-        mutation_combined.append({
-            "document_title": title,
-            "mutational_status": filtered_mutations
-        })
-
-    # ⬛ 3. Precedent disease (only if list has actual entries)
-    precedent = data.get("precedent_disease", [])
-    filtered_diseases = [d for d in precedent if any(d.values())]
-    if filtered_diseases:
-        precedent_combined.append({
-            "document_title": title,
-            "precedent_disease": filtered_diseases
-        })
-
-# 🔽 Save all three combined outputs
-with open(performance_output_path, 'w', encoding='utf-8') as f:
-    json.dump(performance_combined, f, indent=4)
-
-with open(mutation_output_path, 'w', encoding='utf-8') as f:
-    json.dump(mutation_combined, f, indent=4)
-
-with open(precedent_output_path, 'w', encoding='utf-8') as f:
-    json.dump(precedent_combined, f, indent=4)
-
-print("✅ Combined files created successfully.")
+# Save each field into its own JSON
+for field, records in field_outputs.items():
+    output_path = os.path.join(field_output_dir, f"{field}.json")
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(records, f, indent=4)
+    print(f"✅ Saved → {output_path}")
