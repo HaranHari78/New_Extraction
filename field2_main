@@ -3,59 +3,54 @@ import json
 import re
 from pathlib import Path
 
-# 🔹 Input folders (adjust if needed)
-sentence_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences")
-field_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields")
+# 🔹 Input folder (field-level JSON files)
+field_input_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields")
 
-# 🔹 Output files
-performance_output_path = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\performance_status_output.json")
-mutation_output_path = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\mutational_status_output.json")
+# 🔹 Output folders
+performance_output_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\performance_status_fields")
+mutation_output_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\mutational_status_fields")
 
-# 🔹 Output lists
-performance_status_output = []
-mutational_status_output = []
+os.makedirs(performance_output_dir, exist_ok=True)
+os.makedirs(mutation_output_dir, exist_ok=True)
 
-# 🔹 Clean filename helper
+# 🔹 Helper: sanitize filenames
 def sanitize_filename(name: str) -> str:
     return re.sub(r'[\\/*?:"<>|]', "_", name)
 
-# 🔁 Process each field file
-for field_file in field_dir.glob("*.json"):
+# 🔁 Loop through each field JSON file
+for filename in os.listdir(field_input_dir):
+    if not filename.endswith(".json"):
+        continue
+
+    input_path = field_input_dir / filename
     try:
-        with open(field_file, "r", encoding="utf-8") as f:
-            field_data = json.load(f)
-
-        document_title = field_data.get("document_title", field_file.stem)
-        sentence_file = sentence_dir / f"{sanitize_filename(document_title)}.json"
-
-        if not sentence_file.exists():
-            print(f"⚠️ Sentence file not found: {sentence_file}")
+        with open(input_path, 'r', encoding='utf-8') as f:
+            content = f.read().strip()
+        if not content:
+            print(f"⚠️ Skipping empty file: {filename}")
             continue
-
-        with open(sentence_file, "r", encoding="utf-8") as f:
-            sentence_data = json.load(f)
-
-        # ✅ Extract performance_status block
-        performance_status_output.append({
-            "document_title": document_title,
-            "performance_status": field_data.get("performance_status", {})
-        })
-
-        # ✅ Extract mutational_status block
-        mutational_status_output.append({
-            "document_title": document_title,
-            "mutational_status": field_data.get("mutational_status", {})
-        })
-
+        data = json.loads(content)
     except Exception as e:
-        print(f"❌ Error processing {field_file.name}: {e}")
+        print(f"❌ Error reading {filename}: {e}")
+        continue
 
-# 💾 Save output files
-with open(performance_output_path, "w", encoding="utf-8") as f:
-    json.dump(performance_status_output, f, indent=4)
+    document_title = data.get("document_title", filename.replace(".json", ""))
+    safe_filename = sanitize_filename(document_title) + ".json"
 
-with open(mutation_output_path, "w", encoding="utf-8") as f:
-    json.dump(mutational_status_output, f, indent=4)
+    # ✅ Save performance_status field
+    performance_data = {
+        "document_title": document_title,
+        "performance_status": data.get("performance_status", {})
+    }
+    with open(performance_output_dir / safe_filename, 'w', encoding='utf-8') as f:
+        json.dump(performance_data, f, indent=4)
+    print(f"✅ Saved → {performance_output_dir / safe_filename}")
 
-print(f"✅ Saved: {performance_output_path}")
-print(f"✅ Saved: {mutation_output_path}")
+    # ✅ Save mutational_status field
+    mutation_data = {
+        "document_title": document_title,
+        "mutational_status": data.get("mutational_status", {})
+    }
+    with open(mutation_output_dir / safe_filename, 'w', encoding='utf-8') as f:
+        json.dump(mutation_data, f, indent=4)
+    print(f"✅ Saved → {mutation_output_dir / safe_filename}")
