@@ -3,24 +3,24 @@ import json
 import re
 from pathlib import Path
 
-# 🔹 Input folder (field-level JSON files)
+# Input folder (field-level JSON files)
 field_input_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields")
 
-# 🔹 Output folders for individual fields
-performance_output_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\performance_status_fields")
-mutation_output_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\mutational_status_fields")
-precedent_output_dir = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\precedent_disease_fields")
+# Output paths for combined files
+performance_output_path = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\combined_performance_status.json")
+mutation_output_path = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\combined_mutational_status.json")
+precedent_output_path = Path(r"C:\Users\HariharaM12\PycharmProjects\New_project\output\combined_precedent_disease.json")
 
-# 🔹 Create folders if they don’t exist
-os.makedirs(performance_output_dir, exist_ok=True)
-os.makedirs(mutation_output_dir, exist_ok=True)
-os.makedirs(precedent_output_dir, exist_ok=True)
-
-# 🔹 Helper to clean up file names
+# Helper to sanitize filenames
 def sanitize_filename(name: str) -> str:
     return re.sub(r'[\\/*?:"<>|]', "_", name)
 
-# 🔁 Process each field file
+# Containers for combined results
+performance_combined = []
+mutation_combined = []
+precedent_combined = []
+
+# Loop through field files
 for filename in os.listdir(field_input_dir):
     if not filename.endswith(".json"):
         continue
@@ -30,38 +30,53 @@ for filename in os.listdir(field_input_dir):
         with open(input_path, 'r', encoding='utf-8') as f:
             content = f.read().strip()
         if not content:
-            print(f"⚠️ Skipping empty file: {filename}")
             continue
         data = json.loads(content)
-    except Exception as e:
-        print(f"❌ Error reading {filename}: {e}")
+    except Exception:
         continue
 
-    document_title = data.get("document_title", filename.replace(".json", ""))
-    safe_filename = sanitize_filename(document_title) + ".json"
+    title = data.get("document_title", filename.replace(".json", ""))
 
-    # ✅ Save performance_status
-    performance_data = {
-        "document_title": document_title,
-        "performance_status": data.get("performance_status", {})
+    # ⬛ 1. Performance status (add only if any value/evidence exists)
+    perf = data.get("performance_status", {})
+    if perf.get("ecog_score", {}).get("value") or perf.get("ecog_score", {}).get("evidence") or \
+       perf.get("kps_score", {}).get("value") or perf.get("kps_score", {}).get("evidence"):
+        performance_combined.append({
+            "document_title": title,
+            "performance_status": {
+                k: v for k, v in perf.items() if any(v.values())
+            }
+        })
+
+    # ⬛ 2. Mutational status (filter out empty gene data)
+    mutations = data.get("mutational_status", {})
+    filtered_mutations = {
+        gene: info for gene, info in mutations.items()
+        if any(info.values())
     }
-    with open(performance_output_dir / safe_filename, 'w', encoding='utf-8') as f:
-        json.dump(performance_data, f, indent=4)
+    if filtered_mutations:
+        mutation_combined.append({
+            "document_title": title,
+            "mutational_status": filtered_mutations
+        })
 
-    # ✅ Save mutational_status
-    mutation_data = {
-        "document_title": document_title,
-        "mutational_status": data.get("mutational_status", {})
-    }
-    with open(mutation_output_dir / safe_filename, 'w', encoding='utf-8') as f:
-        json.dump(mutation_data, f, indent=4)
+    # ⬛ 3. Precedent disease (only if list has actual entries)
+    precedent = data.get("precedent_disease", [])
+    filtered_diseases = [d for d in precedent if any(d.values())]
+    if filtered_diseases:
+        precedent_combined.append({
+            "document_title": title,
+            "precedent_disease": filtered_diseases
+        })
 
-    # ✅ Save precedent_disease
-    precedent_data = {
-        "document_title": document_title,
-        "precedent_disease": data.get("precedent_disease", [])
-    }
-    with open(precedent_output_dir / safe_filename, 'w', encoding='utf-8') as f:
-        json.dump(precedent_data, f, indent=4)
+# 🔽 Save all three combined outputs
+with open(performance_output_path, 'w', encoding='utf-8') as f:
+    json.dump(performance_combined, f, indent=4)
 
-    print(f"✅ Saved: {safe_filename}")
+with open(mutation_output_path, 'w', encoding='utf-8') as f:
+    json.dump(mutation_combined, f, indent=4)
+
+with open(precedent_output_path, 'w', encoding='utf-8') as f:
+    json.dump(precedent_combined, f, indent=4)
+
+print("✅ Combined files created successfully.")
