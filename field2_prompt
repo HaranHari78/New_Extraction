@@ -1,0 +1,47 @@
+import os
+import json
+import re
+
+# 🔹 Input directory: All sentence-level JSON files
+input_dir = r"your/sentence_extraction/folder"
+# 🔹 Output folders
+performance_output_dir = r"your/output/performance_status_sentences"
+mutation_output_dir = r"your/output/mutational_status_sentences"
+
+os.makedirs(performance_output_dir, exist_ok=True)
+os.makedirs(mutation_output_dir, exist_ok=True)
+
+# 🔹 Helper: clean filenames
+def sanitize_filename(name: str) -> str:
+    return re.sub(r'[\\/*?:"<>|]', "_", name)
+
+# 🔁 Process each file
+for filename in os.listdir(input_dir):
+    if not filename.endswith(".json"):
+        continue
+
+    input_path = os.path.join(input_dir, filename)
+
+    with open(input_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    document_title = data.get("document_title", filename.replace(".json", ""))
+    safe_filename = sanitize_filename(document_title) + ".json"
+
+    # ✅ Save performance_status_sentences
+    performance_data = {
+        "document_title": document_title,
+        "performance_status_sentences": data.get("performance_status_sentences", [])
+    }
+    with open(os.path.join(performance_output_dir, safe_filename), 'w', encoding='utf-8') as f:
+        json.dump(performance_data, f, indent=4)
+    print(f"✅ Saved performance: {safe_filename}")
+
+    # ✅ Save mutational_status_sentences
+    mutation_data = {
+        "document_title": document_title,
+        "mutational_status_sentences": data.get("mutational_status_sentences", [])
+    }
+    with open(os.path.join(mutation_output_dir, safe_filename), 'w', encoding='utf-8') as f:
+        json.dump(mutation_data, f, indent=4)
+    print(f"✅ Saved mutation: {safe_filename}")
