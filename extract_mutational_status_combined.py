@@ -43,18 +43,21 @@ for filename in os.listdir(input_dir):
         if field == "document_title":
             continue
 
-        # Special handling for mutational_status: always include the document
+        # Special logic for mutational_status:
+        # ➤ Include only docs with at least one non-empty gene
+        # ➤ Remove empty gene entries
         if field == "mutational_status":
             if isinstance(value, dict):
-                cleaned = {gene: info for gene, info in value.items() if has_data(info)}
-            else:
-                cleaned = {}
-            field_data["mutational_status"].append({
-                "document_title": doc_title,
-                "mutational_status": cleaned
-            })
+                cleaned = {
+                    gene: info for gene, info in value.items() if has_data(info)
+                }
+                if cleaned:
+                    field_data["mutational_status"].append({
+                        "document_title": doc_title,
+                        "mutational_status": cleaned
+                    })
 
-        # Standard handling for other fields (only include if non-empty)
+        # Standard logic for other fields
         elif isinstance(value, dict):
             cleaned = {k: v for k, v in value.items() if has_data(v)}
             if cleaned:
