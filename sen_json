@@ -1,14 +1,28 @@
-[
-    {
-        "document_title": "bfad7df253_44202_ Unmapped_3848687338",
-        "aml_diagnosis_sentences": [
-            "Jaylenn Altier is a 58 y.o. male with hypertension who presented to Parkview Hospital with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy.",
-            "S/p bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
-        ],
-        "precedent_disease_sentences": [
-            "Jaylenn Altier is a 58 y.o. male with hypertension who presented to Parkview Hospital with fatigue and fever and was found to have leukocytosis to 40,000 and diagnosed with AML via bone marrow biopsy."
-        ],
-        "performance_status_sentences": [],
-        "mutational_status_sentences": []
-    }
-]
+{
+    "aml_diagnosis_sentences": [],
+    "precedent_disease_sentences": [
+        "This is a 57 year old with a history of breast cancer, undergoing radiation currently.",
+        "In September 2009, the patient had a lumpectomy in her right breast.",
+        "This showed stage I breast cancer.",
+        "History of colon cancer, this was stage III.",
+        "She had a colectomy in December 2005 and adjuvant chemotherapy and radiation.",
+        "Papillary thyroid carcinoma.",
+        "This was in 2002.",
+        "The patient was treated with thyroidectomy and radioactive iodine.",
+        "She is now hypothyroid on Synthroid."
+    ],
+    "performance_status_sentences": [],
+    "mutational_status_sentences": [],
+    "treatment_sentences": [
+        "She did have adjuvant chemotherapy with Taxotere and Cytoxan and she is now undergoing radiation."
+    ],
+    "hospitalization_reason_sentences": [],
+    "lab_result_sentences": [
+        "Most recent labs from April 2010, potassium was normal, creatinine 0.95.",
+        "TSH was 0, however, the total T4 was 11.8, which is normal."
+    ],
+    "genetic_mutations_sentences": [],
+    "admission_discharge_plan_sentences": [],
+    "diagnosis_summary_sentences": [],
+    "document_title": "bfad7df253_41044_ Assessment & Plan Note_d79e7b504e"
+}
