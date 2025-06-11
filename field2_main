@@ -3,10 +3,13 @@ import json
 import re
 
 # 🔹 Input directory: All sentence-level JSON files
-input_dir = r"your/sentence_extraction/folder"
+input_dir r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
 # 🔹 Output folders
-performance_output_dir = r"your/output/performance_status_sentences"
-mutation_output_dir = r"your/output/mutational_status_sentences"
+# Output for performance_status_sentences
+performance_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\performance_status_sentences"
+
+# Output for mutational_status_sentences
+mutation_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\mutational_status_sentences"
 
 os.makedirs(performance_output_dir, exist_ok=True)
 os.makedirs(mutation_output_dir, exist_ok=True)
