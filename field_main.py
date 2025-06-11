@@ -7,7 +7,17 @@ from utils import load_config, call_openai_api
 # Input: sentence files
 sentence_input_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
 # Output: structured fields per title
-field_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields"
+sentence_input_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
+
+# Output for performance_status_sentences
+performance_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\performance_status_sentences"
+
+# Output for mutational_status_sentences
+mutation_output_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\mutational_status_sentences"
+
+os.makedirs(performance_output_dir, exist_ok=True)
+os.makedirs(mutation_output_dir, exist_ok=True)
+
 os.makedirs(field_output_dir, exist_ok=True)
 
 # Load config and model
