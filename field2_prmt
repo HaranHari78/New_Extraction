@@ -1,0 +1,94 @@
+def build_field_prompt(sentences: dict) -> str:
+    return f"""
+You are an expert medical assistant. Extract structured fields from the following clinical sentences.
+
+Return only the values that are available in the text. Skip fields or subfields with empty values.
+
+Sentences:
+{sentences}
+
+Return in this JSON format:
+{{
+  "aml_diagnosis_date": {{
+    "value": "",
+    "evidence": ""
+  }},
+  "precedent_disease": [
+    {{
+      "name": "",
+      "date": "",
+      "evidence": ""
+    }}
+  ],
+  "performance_status": {{
+    "ecog_score": {{
+      "value": "",
+      "date": "",
+      "evidence": ""
+    }},
+    "kps_score": {{
+      "value": "",
+      "date": "",
+      "evidence": ""
+    }}
+  }},
+  "mutational_status": {{
+    "NPM1": {{
+      "status": "",
+      "date": "",
+      "evidence": ""
+    }},
+    "RUNX1": {{
+      "status": "",
+      "date": "",
+      "evidence": ""
+    }},
+    "TP53": {{
+      "status": "",
+      "date": "",
+      "evidence": ""
+    }},
+    "FLT3": {{
+      "status": "",
+      "date": "",
+      "evidence": ""
+    }},
+    "ASXL1": {{
+      "status": "",
+      "date": "",
+      "evidence": ""
+    }}
+  }},
+  "treatment_details": [
+    {{
+      "regimen": "",
+      "start_date": "",
+      "evidence": ""
+    }}
+  ],
+  "hospitalization_reason": {{
+    "symptoms": "",
+    "admission_date": "",
+    "evidence": ""
+  }},
+  "lab_results": [
+    {{
+      "test_name": "",
+      "value": "",
+      "date": "",
+      "evidence": ""
+    }}
+  ],
+  "genetic_mutations": [
+    {{
+      "gene": "",
+      "status": "",
+      "evidence": ""
+    }}
+  ],
+  "followup_plan": {{
+    "plan_summary": "",
+    "evidence": ""
+  }}
+}}
+"""
