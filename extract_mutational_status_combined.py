@@ -27,7 +27,15 @@ for filename in os.listdir(input_dir):
 
     filepath = os.path.join(input_dir, filename)
     with open(filepath, 'r', encoding='utf-8') as f:
-        doc = json.load(f)
+        content = f.read().strip()
+        if not content:
+            print(f"⚠️ Skipping empty file: {filename}")
+            continue
+        try:
+            doc = json.loads(content)
+        except json.JSONDecodeError:
+            print(f"❌ Invalid JSON in file: {filename}")
+            continue
 
     doc_title = doc.get("document_title", filename.replace(".json", ""))
 
