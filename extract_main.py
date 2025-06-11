@@ -49,7 +49,38 @@ for idx, row in df.iterrows():
 os.makedirs("output", exist_ok=True)
 try:
     with open(output_file, 'w', encoding='utf-8') as f:
+
         json.dump(results, f, indent=4)
     print(f"\n✅ Mutation-only results saved to: {output_file} ({len(results)} records)")
 except Exception as e:
     print(f"❌ Failed to save mutation results: {e}")
+
+
+output:
+
+[
+    {
+        "document_title": "bfad7df253_44215_ Unmapped_b847916fd5",
+        "mutational_status": {
+            "NPM1": {
+                "status": "mutated",
+                "date": "2021-01-04",
+                "evidence": "BMBx on 1/4 showed AML with monocytic differentiation (73% blasts) and he was subsequently started on aza/ven on 1/5. Prelim cytogenetic analysis is normal w/ molectular profile demonstrating DNMT3A R882C 44%, IDH1 R132G 41%, NPM1 Type A mutation 40%, NRAS G13R 40%."
+            },
+            "TP53": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "FLT3": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            },
+            "ASXL1": {
+                "status": "",
+                "date": "",
+                "evidence": ""
+            }
+        }
+    },
