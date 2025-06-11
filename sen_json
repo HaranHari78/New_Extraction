@@ -26,3 +26,49 @@
     "diagnosis_summary_sentences": [],
     "document_title": "bfad7df253_41044_ Assessment & Plan Note_d79e7b504e"
 }
+
+{
+    "aml_diagnosis_sentences": [
+        "He underwent bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts)."
+    ],
+    "precedent_disease_sentences": [
+        "Adalid Beckmann is a 56yo man with hypertension.",
+        "Creatinine was 1.4 on presentation, increased from 1.26 in 9/2020."
+    ],
+    "performance_status_sentences": [],
+    "mutational_status_sentences": [
+        "Prelim cytogenetic analysis is normal w/ molectular profile demonstrating:   DNMT3A R882C 44%  IDH1 R132G 41%   NPM1 Type A mutation 40%   NRAS G13R 40%."
+    ],
+    "treatment_sentences": [
+        "He was started on cefepime empirically.",
+        "He underwent bone marrow biopsy on 1/4 which showed AML with monocytic differentiation (73% blasts) and was subsequently started on aza/ven on 1/5.",
+        "Patient will continue venetoclax as an outpatient w/ plans to repeat his BMBx on 1/28, which will help determine further therapy."
+    ],
+    "hospitalization_reason_sentences": [
+        "Adalid Beckmann is a 56yo man with hypertension who presented to Muncie Eye Specialitsts Surgery Center with a 1 week history of fatigue, myalgias, and generalized weakness as well as an episode of fever to 103."
+    ],
+    "lab_result_sentences": [
+        "On presentation, he was found to have a WBC count of 43,300 with numerous monocytes and few myeloblasts on the differential.",
+        "Admission labs were notable for WBC 42.8 (ANC 7.4, monocytes 30.4), Hgb 10.2, Plts 61.",
+        "LDH was elevated to 2093.",
+        "CXR was normal.",
+        "UA showed > 100 WBCs, with negative leukocyte esterase and nitrites.",
+        "Creatinine was 1.4 on presentation, increased from 1.26 in 9/2020.",
+        "Creatinine was 1.57 the following morning and he received an additional liter of IV fluids."
+    ],
+    "genetic_mutations_sentences": [
+        "Prelim cytogenetic analysis is normal w/ molectular profile demonstrating:   DNMT3A R882C 44%  IDH1 R132G 41%   NPM1 Type A mutation 40%   NRAS G13R 40%."
+    ],
+    "admission_discharge_plan_sentences": [
+        "At the time of discharge, Cr has normalized w/ improved PO hydration.",
+        "At the time of discharge, he is being continued on metoprolol 25mg TID w/ recommendations to maintain good PO hydration.",
+        "At the time of discharge, these medications are still being held given low blood pressures."
+    ],
+    "diagnosis_summary_sentences": [
+        "He was transferred to West Asc LLC due to concern for leukemia.",
+        "Review of blood smear was concerning for the presence of immature cells consisting of myeloblasts, as well as numerous monocytes and some promyelocytes."
+    ],
+    "document_title": "bfad7df253_44199_ Unmapped_189debb3b9"
+}
+
+
