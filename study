@@ -1,0 +1,7 @@
+Basic concepts of tokens, embedding in LLM.
+Cosine Similarity
+RAG concept
+RAG using langchain
+Chain Of thoughts in LLM
+LLM parameter such as Temperature, top_p, top_k
+Various techniques of prompt engineering.
