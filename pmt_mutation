@@ -1,29 +1,31 @@
-def mutation_extraction_prompt(text: str, patient_id: int, name: str):
+def build_mutation_prompt(sentences: list, doc_title: str) -> str:
+    joined_text = " ".join(sentences)
     return f"""
-You are a medical language model trained to extract structured clinical data from patient notes.
+You are a medical language model trained to extract structured clinical mutation data from a patient's clinical note.
 
-You are analyzing the clinical note of a cancer patient.
+📄 Document Title: {doc_title}
 
-🆔 Patient ID: {patient_id}
-👤 Patient Name: {name}
+Below are sentences related to the patient's mutational status.
 
-From the clinical note below, extract **mutation status** information for the following genes:
-- NPM1, TP53, FLT3, ASXL1
+Your task is to extract the mutation status for the following genes:
+- NPM1
+- TP53
+- FLT3
+- ASXL1
 
-Look specifically for phrases indicating:
-- Whether the gene is **mutated**, **wild type**, **not mutated**, **positive**, or **negative**
-- Also capture **date of test** if mentioned
-- Always include the **exact sentence** as evidence
+For **each gene**, return:
+- `status`: mutated, wild type, not mutated, negative, positive, not detected, etc.
+- `date`: the test or mention date, if present
+- `evidence`: the exact sentence or phrase that supports the status
 
-📌 Important:
-- If a gene is only mentioned but **no status** is given (like mutated or wild type), leave "status" as empty string but still return the sentence.
-- Be strict: only classify a gene as mutated/wild type if it’s clearly stated.
+🧠 Important Rules:
+- Only include a gene **if it has any non-empty field** (status, date, or evidence)
+- Do **not make up** or guess status; if unclear, leave fields as empty string
+- Focus only on the 4 mentioned genes
 
-Return output strictly in the following JSON format:
+Return JSON strictly in this format:
 
 {{
-  "id": {patient_id},
-  "patient_code": "{name}",
   "mutational_status": {{
     "NPM1": {{"status": "", "date": "", "evidence": ""}},
     "TP53": {{"status": "", "date": "", "evidence": ""}},
@@ -32,6 +34,6 @@ Return output strictly in the following JSON format:
   }}
 }}
 
-Clinical Note:
-\"\"\"{text}\"\"\"
+🔬 Sentences:
+\"\"\"{joined_text}\"\"\"
 """
