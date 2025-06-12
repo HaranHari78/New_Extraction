@@ -84,3 +84,91 @@ output:
             }
         }
     },
+
+
+# field_extraction_main.py
+
+import os
+import json
+import re
+from prompts_field import build_mutation_prompt
+from utils import load_config, call_openai_api
+
+# --- CONFIG ---
+input_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
+output_file = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields\mutational_status_all.json"
+os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+# BATCH RANGE – CHANGE HERE for each run
+start_index = 0
+end_index = 50
+
+# --- LOAD CONFIG ---
+config = load_config()
+model = config['gpt_models']['model_gpt4o']
+
+# --- HELPERS ---
+def sanitize_filename(name: str) -> str:
+    return re.sub(r'[\\/*?:"<>|]', "_", name)
+
+def clean_response(resp: str) -> str:
+    return re.sub(r'```(?:json)?\n?|\n?```', '', resp).strip()
+
+# Load existing results (for appending)
+if os.path.exists(output_file):
+    with open(output_file, 'r', encoding='utf-8') as f:
+        final_results = json.load(f)
+else:
+    final_results = []
+
+# List of all files and slice for batch
+all_files = sorted([f for f in os.listdir(input_dir) if f.endswith(".json")])
+batch_files = all_files[start_index:end_index]
+
+for filename in batch_files:
+    file_path = os.path.join(input_dir, filename)
+    with open(file_path, 'r', encoding='utf-8') as f:
+        sentence_data = json.load(f)
+
+    doc_title = sentence_data.get("document_title", filename.replace(".json", ""))
+    
+    # Skip if this doc already exists in output
+    if any(doc["document_title"] == doc_title for doc in final_results):
+        print(f"⏭️ Already processed: {doc_title}")
+        continue
+
+    mutation_sents = sentence_data.get("mutational_status_sentences", [])
+    if not mutation_sents:
+        continue
+
+    prompt = build_mutation_prompt(mutation_sents, doc_title)
+    response = call_openai_api(prompt, model)
+
+    if not response:
+        print(f"❌ No response for: {doc_title}")
+        continue
+
+    try:
+        raw = clean_response(response)
+        parsed = json.loads(raw)
+        filtered_genes = {
+            gene: data for gene, data in parsed.get("mutational_status", {}).items()
+            if any(data.values())
+        }
+        if not filtered_genes:
+            continue
+
+        final_results.append({
+            "document_title": doc_title,
+            "mutational_status": filtered_genes
+        })
+        print(f"✅ Done: {doc_title}")
+
+    except Exception as e:
+        print(f"⚠️ Error parsing {doc_title}: {e}")
+
+# Save updated results
+with open(output_file, 'w', encoding='utf-8') as f:
+    json.dump(final_results, f, indent=4)
+
+print(f"\n📦 Updated output saved to {output_file} ({len(final_results)} total records)")
