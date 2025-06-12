@@ -1,0 +1,52 @@
+def build_performance_status_prompt(text: str, doc_title: str) -> str:
+    return f"""
+You are a medical language model trained to extract structured **Performance Status** data from clinical notes.
+
+Please analyze the input text and extract **ECOG** or **KPS** performance scores that meet **all** of the following criteria:
+
+✅ The extracted score must be:
+- Clearly stated in the form of **ECOG** (0–5) or **KPS** (0–100)
+- Supported by the **exact evidence sentence** (copied verbatim)
+- Paired with the **document title**: "{doc_title}"
+
+❌ Do NOT include:
+- Inferred scores (like “seems poor” without a numeric score)
+- Mentions without clear ECOG/KPS values
+- Incomplete entries (missing score or evidence)
+
+---
+
+💡 Valid evidence examples:
+- "Patient has ECOG performance status of 2."
+- "Karnofsky score recorded as 80 during last visit."
+- "ECOG: 1 on admission, patient was ambulatory."
+
+---
+
+📤 Output Format (JSON only):
+{{
+  "performance_status": [
+    {{
+      "score_type": "ECOG",
+      "value": "<ECOG_VALUE>",
+      "date": "<DATE_IF_AVAILABLE>",
+      "evidence_sentence": "<EXACT_SENTENCE>",
+      "docu_title": "{doc_title}"
+    }},
+    {{
+      "score_type": "KPS",
+      "value": "<KPS_VALUE>",
+      "date": "<DATE_IF_AVAILABLE>",
+      "evidence_sentence": "<EXACT_SENTENCE>",
+      "docu_title": "{doc_title}"
+    }}
+  ]
+}}
+
+Only include entries that are explicitly stated and complete.
+
+---
+
+📄 Input Text:
+\"\"\"{text}\"\"\"
+"""
