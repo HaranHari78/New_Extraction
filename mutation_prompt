@@ -35,3 +35,48 @@ Return output strictly in the following JSON format:
 Clinical Note:
 \"\"\"{text}\"\"\"
 """
+
+def build_genetic_mutation_prompt(text: str, doc_title: str) -> str:
+    return f"""
+You are a medical language model trained to extract structured genetic mutation data from clinical notes.
+
+Please analyze the input text and extract gene mutations that meet **all** of the following criteria:
+
+✅ Mutation must be:
+- Explicitly stated as **positive**, **present**, **detected**, or **found**
+- Related to a specific **gene name** (e.g., FLT3, NPM1, TP53, ASXL1)
+- Supported by the **exact evidence sentence** (copied exactly from the input)
+- Include the **document title**: "{doc_title}"
+
+❌ Do NOT include:
+- Genes marked as **negative**, **absent**, or **not detected**
+- Summarized or inferred data
+- Incomplete records (missing any of the 4 required fields)
+
+---
+
+💡 Examples of valid evidence:
+- "Genomic analysis shows FLT3 mutation is positive."
+- "NPM1 was detected in the genetic test."
+- "TP53 mutation was found on sequencing."
+
+---
+
+📤 Output Format (JSON only):
+{{
+  "genetic_mutations": [
+    {{
+      "gene": "<GENE_NAME>",
+      "presence": "positive",
+      "docu_title": "{doc_title}",
+      "evidence_sentence": "<EXACT_SENTENCE_FROM_NOTE>"
+    }}
+  ]
+}}
+
+---
+
+📄 Input Text:
+\"\"\"{text}\"\"\"
+"""
+
