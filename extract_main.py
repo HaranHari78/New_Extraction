@@ -172,3 +172,20 @@ with open(output_file, 'w', encoding='utf-8') as f:
     json.dump(final_results, f, indent=4)
 
 print(f"\n📦 Updated output saved to {output_file} ({len(final_results)} total records)")
+
+{
+  "genetic_mutations": [
+    {
+      "gene": "NPM1",
+      "presence": "positive",
+      "docu_title": "bfad7df253_44235__Unmapped_db4a49c191",
+      "evidence_sentence": "He is NPM1 positive, FLT3 ITD negative, which usually suggests a favorable response to azacitidine/venetoclax."
+    },
+    {
+      "gene": "NPM1",
+      "presence": "positive",
+      "docu_title": "bfad7df253_44242__Unmapped_91922eeb68",
+      "evidence_sentence": "He is NPM1 positive, FLT3 ITD negative, which usually suggests a favorable response to azacitidine/venetoclax."
+    }
+  ]
+}
