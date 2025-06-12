@@ -1,0 +1,37 @@
+def mutation_extraction_prompt(text: str, patient_id: int, name: str):
+    return f"""
+You are a medical language model trained to extract structured clinical data from patient notes.
+
+You are analyzing the clinical note of a cancer patient.
+
+🆔 Patient ID: {patient_id}
+👤 Patient Name: {name}
+
+From the clinical note below, extract **mutation status** information for the following genes:
+- NPM1, TP53, FLT3, ASXL1
+
+Look specifically for phrases indicating:
+- Whether the gene is **mutated**, **wild type**, **not mutated**, **positive**, or **negative**
+- Also capture **date of test** if mentioned
+- Always include the **exact sentence** as evidence
+
+📌 Important:
+- If a gene is only mentioned but **no status** is given (like mutated or wild type), leave "status" as empty string but still return the sentence.
+- Be strict: only classify a gene as mutated/wild type if it’s clearly stated.
+
+Return output strictly in the following JSON format:
+
+{{
+  "id": {patient_id},
+  "patient_code": "{name}",
+  "mutational_status": {{
+    "NPM1": {{"status": "", "date": "", "evidence": ""}},
+    "TP53": {{"status": "", "date": "", "evidence": ""}},
+    "FLT3": {{"status": "", "date": "", "evidence": ""}},
+    "ASXL1": {{"status": "", "date": "", "evidence": ""}}
+  }}
+}}
+
+Clinical Note:
+\"\"\"{text}\"\"\"
+"""
