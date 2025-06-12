@@ -189,3 +189,54 @@ print(f"\n📦 Updated output saved to {output_file} ({len(final_results)} total
     }
   ]
 }
+
+You are a clinical language expert specializing in extracting mutational status information from medical notes.
+
+Your task is to analyze and extract only the **positive gene mutations** mentioned explicitly in the text. Return the result as a structured JSON object in the format described below.
+
+---
+
+Output Format:
+```json
+{
+  "genetic_mutations": [
+    {
+      "gene": "<GENE_NAME>",
+      "presence": "positive",
+      "docu_title": "<DOCUMENT_TITLE>",
+      "evidence_sentence": "<EXACT_SENTENCE_FROM_NOTE>"
+    }
+  ]
+}
+```
+
+---
+
+Extraction Criteria:
+
+- Include only mutations that are **explicitly stated as positive, present, detected, or found**.
+- Each gene mutation should:
+  - Mention the **gene name** (e.g., FLT3, NPM1, TP53, ASXL1)
+  - Be **clearly described as present or positive** (avoid negatives or absence)
+  - Be supported by an **exact sentence from the text** (verbatim)
+  - Include the **document title** for traceability
+
+- **Examples of valid evidence phrases**:
+  - "Genomic analysis shows FLT3 mutation is positive."
+  - "NPM1 was detected in the genetic test."
+  - "TP53 mutation was found on sequencing."
+
+---
+
+Instructions:
+
+- **Do not include mutations that are negative, absent, or inconclusive.**
+- **Do not summarize or infer anything.**
+- Return only the JSON object, exactly as described.
+- Only include entries for which all 4 fields can be clearly extracted.
+
+---
+
+Input:
+
+{{text}}
