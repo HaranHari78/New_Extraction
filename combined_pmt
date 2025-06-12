@@ -1,0 +1,98 @@
+def build_genetic_mutation_prompt(text: str, doc_title: str) -> str:
+    return f"""
+You are a medical language model trained to extract structured genetic mutation data from clinical notes.
+
+Please analyze the input text and extract gene mutations that meet **all** of the following criteria:
+
+✅ Mutation must be:
+- Explicitly stated as **positive**, **present**, **detected**, or **found**
+- Related to a specific **gene name** (e.g., FLT3, NPM1, TP53, ASXL1)
+- Supported by the **exact evidence sentence** (copied exactly from the input)
+- Include the **document title**: "{doc_title}"
+
+❌ Do NOT include:
+- Genes marked as **negative**, **absent**, or **not detected**
+- Summarized or inferred data
+- Incomplete records (missing any of the 4 required fields)
+
+---
+
+💡 Examples of valid evidence:
+- "Genomic analysis shows FLT3 mutation is positive."
+- "NPM1 was detected in the genetic test."
+- "TP53 mutation was found on sequencing."
+
+---
+
+📤 Output Format (JSON only):
+{{
+  "genetic_mutations": [
+    {{
+      "gene": "<GENE_NAME>",
+      "presence": "positive",
+      "docu_title": "{doc_title}",
+      "evidence_sentence": "<EXACT_SENTENCE_FROM_NOTE>"
+    }}
+  ]
+}}
+
+Only include entries that are explicitly stated and complete.
+
+---
+
+📄 Input Text:
+\"\"\"{text}\"\"\"
+"""
+
+def build_performance_status_prompt(text: str, doc_title: str) -> str:
+    return f"""
+You are a medical language model trained to extract structured **Performance Status** data from clinical notes.
+
+Please analyze the input text and extract **ECOG** or **KPS** performance scores that meet **all** of the following criteria:
+
+✅ The extracted score must be:
+- Clearly stated in the form of **ECOG** (0–5) or **KPS** (0–100)
+- Supported by the **exact evidence sentence** (copied verbatim)
+- Paired with the **document title**: "{doc_title}"
+
+❌ Do NOT include:
+- Inferred scores (like “seems poor” without a numeric score)
+- Mentions without clear ECOG/KPS values
+- Incomplete entries (missing score or evidence)
+
+---
+
+💡 Valid evidence examples:
+- "Patient has ECOG performance status of 2."
+- "Karnofsky score recorded as 80 during last visit."
+- "ECOG: 1 on admission, patient was ambulatory."
+
+---
+
+📤 Output Format (JSON only):
+{{
+  "performance_status": [
+    {{
+      "score_type": "ECOG",
+      "value": "<ECOG_VALUE>",
+      "date": "<DATE_IF_AVAILABLE>",
+      "evidence_sentence": "<EXACT_SENTENCE>",
+      "docu_title": "{doc_title}"
+    }},
+    {{
+      "score_type": "KPS",
+      "value": "<KPS_VALUE>",
+      "date": "<DATE_IF_AVAILABLE>",
+      "evidence_sentence": "<EXACT_SENTENCE>",
+      "docu_title": "{doc_title}"
+    }}
+  ]
+}}
+
+Only include entries that are explicitly stated and complete.
+
+---
+
+📄 Input Text:
+\"\"\"{text}\"\"\"
+"""
