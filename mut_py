@@ -1,45 +1,78 @@
 import os
 import json
+import re
+from prompts_field import build_mutation_extraction_prompt
+from utils import load_config, call_openai_api
 
-# Input: Flat mutation data
-input_file = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields\mutational_status_flat.json"
-
-# Output: Grouped by gene
+# --- CONFIG ---
+input_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
 output_file = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields\mutational_status_grouped.json"
+os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-# Load input data
-with open(input_file, 'r', encoding='utf-8') as f:
-    flat_data = json.load(f)
+# --- BATCH RANGE ---
+start_index = 0
+end_index = 50  # Adjust as needed
 
-# Initialize grouped result
-grouped_result = {
-    "mutational_status": {}
-}
+# --- LOAD MODEL ---
+config = load_config()
+model = config['gpt_models']['model_gpt4o']
 
-# Grouping logic
-for item in flat_data:
-    doc_title = item.get("document_title", "")
-    gene_data = item.get("mutational_status", {})
+# --- CLEAN FUNCTION ---
+def clean_response(resp: str) -> str:
+    return re.sub(r'```(?:json)?\n?|\n?```', '', resp).strip()
 
-    for gene, fields in gene_data.items():
-        # Skip gene if all fields are empty
-        if not any(fields.values()):
-            continue
+# --- RESULT HOLDER ---
+grouped_result = { "mutational_status": {} }
 
-        gene_entry = {
-            "document_title": doc_title,
-            "status": fields.get("status", ""),
-            "date": fields.get("date", ""),
-            "evidence": fields.get("evidence", "")
-        }
+# --- PROCESS FILES ---
+all_files = sorted([f for f in os.listdir(input_dir) if f.endswith(".json")])
+batch_files = all_files[start_index:end_index]
 
-        if gene not in grouped_result["mutational_status"]:
-            grouped_result["mutational_status"][gene] = []
+for filename in batch_files:
+    filepath = os.path.join(input_dir, filename)
+    with open(filepath, 'r', encoding='utf-8') as f:
+        data = json.load(f)
 
-        grouped_result["mutational_status"][gene].append(gene_entry)
+    doc_title = data.get("document_title", filename.replace(".json", ""))
+    mutation_sents = data.get("mutational_status_sentences", [])
+    if not mutation_sents:
+        continue
 
-# Save final grouped output
+    prompt_text = " ".join(mutation_sents)
+    prompt = build_mutation_extraction_prompt(prompt_text, doc_title)
+    response = call_openai_api(prompt, model)
+
+    if not response:
+        print(f"❌ No response: {doc_title}")
+        continue
+
+    try:
+        raw = clean_response(response)
+        parsed = json.loads(raw)
+        mutation_data = parsed.get("mutational_status", {})
+
+        for gene, fields in mutation_data.items():
+            if not any(fields.values()):
+                continue
+
+            entry = {
+                "document_title": doc_title,
+                "status": fields.get("status", ""),
+                "date": fields.get("date", ""),
+                "evidence": fields.get("evidence", "")
+            }
+
+            if gene not in grouped_result["mutational_status"]:
+                grouped_result["mutational_status"][gene] = []
+
+            grouped_result["mutational_status"][gene].append(entry)
+
+        print(f"✅ Done: {doc_title}")
+    except Exception as e:
+        print(f"⚠️ Failed: {doc_title} → {e}")
+
+# --- SAVE OUTPUT ---
 with open(output_file, 'w', encoding='utf-8') as f:
     json.dump(grouped_result, f, indent=4)
 
-print(f"✅ Final grouped mutation output saved to → {output_file}")
+print(f"\n📁 Grouped mutation output saved → {output_file}")
