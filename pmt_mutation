@@ -37,3 +37,46 @@ Return JSON strictly in this format:
 🔬 Sentences:
 \"\"\"{joined_text}\"\"\"
 """
+
+
+def build_mutation_extraction_prompt(text: str, doc_title: str) -> str:
+    return f"""
+You are a medical language model trained to extract structured mutation data from clinical notes.
+
+You will analyze the text and extract mutation information for these genes:
+- NPM1, FLT3, TP53, ASXL1, RUNX1
+
+📄 Document Title: {doc_title}
+
+🔍 Extraction Instructions:
+1. For each gene, extract:
+   - `status`: mutated / not mutated / wild type / positive / negative
+   - `date`: date of the test (if mentioned)
+   - `evidence`: exact sentence or phrase from the note
+
+2. If a gene is not mentioned at all, **do not include it** in the response.
+
+3. If a gene is mentioned without status or date, still include it but leave the fields blank.
+
+4. ❗ Avoid repeated entries:
+   - Do not extract the same finding more than once
+   - If the same mutation is mentioned multiple times in different wording, include only the most informative one.
+
+🧾 Clinical Note:
+\"\"\"{text}\"\"\"
+
+📤 Return your result in this JSON format:
+{{
+  "document_title": "{doc_title}",
+  "mutational_status": {{
+    "NPM1": {{"status": "", "date": "", "evidence": ""}},
+    "FLT3": {{"status": "", "date": "", "evidence": ""}},
+    "TP53": {{"status": "", "date": "", "evidence": ""}},
+    "ASXL1": {{"status": "", "date": "", "evidence": ""}},
+    "RUNX1": {{"status": "", "date": "", "evidence": ""}}
+  }}
+}}
+
+⚠️ Exclude genes completely if they are not mentioned in the note.
+"""
+
