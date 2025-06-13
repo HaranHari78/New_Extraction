@@ -53,3 +53,42 @@
         }
     }
 ]
+
+PERFECT OUTPUT:
+
+{
+    "mutational_status": {
+        "NPM1": [
+            {
+                "document_title": "bfad7df253_44199_ Unmapped_189debb3b9",
+                "status": "mutated",
+                "date": "",
+                "evidence": "NPM1 Type A mutation 40%"
+            },
+            {
+                "document_title": "bfad7df253_44215_ Unmapped_b847916fd5",
+                "status": "mutated",
+                "date": "",
+                "evidence": "NPM1 Type A mutation 40%"
+            },
+            {
+                "document_title": "bfad7df253_44216_ Unmapped_6e878f3a39",
+                "status": "mutated",
+                "date": "",
+                "evidence": "NPM1 Type A mutation 40%"
+            },
+            {
+                "document_title": "bfad7df253_44216_ Unmapped_c8c1a4a643",
+                "status": "mutated",
+                "date": "",
+                "evidence": "NPM1 Type A mutation 40%"
+            },
+            {
+                "document_title": "bfad7df253_44217_ Unmapped_7d27931371",
+                "status": "mutated",
+                "date": "",
+                "evidence": "NPM1 Type A mutation 40%"
+            }
+        ]
+    }
+}
