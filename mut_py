@@ -1,17 +1,17 @@
 import os
 import json
 import re
-from prompts_field import build_mutation_extraction_prompt
+from mut_prompts_field import build_mutation_extraction_prompt
 from utils import load_config, call_openai_api
 
 # --- CONFIG ---
-input_dir = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\sentences"
-output_file = r"C:\Users\HariharaM12\PycharmProjects\New_project\output\fields\mutational_status_grouped.json"
+input_dir = r"C:\Users\HariharaM12\PycharmProjects\Med_Data\output\sentences"
+output_file = r"C:\Users\HariharaM12\PycharmProjects\Med_Data\output\fields\mutational_status_grouped.json"
 os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
 # --- BATCH RANGE ---
 start_index = 0
-end_index = 50  # Adjust as needed
+end_index = 100 # Adjust as needed
 
 # --- LOAD MODEL ---
 config = load_config()
