@@ -2,98 +2,66 @@ import json
 import re
 import os
 import pandas as pd
-from prompts import sentence_extraction_prompt, field_extraction_prompt
+from prompts import build_sentence_prompt
 from utils import load_config, call_openai_api
 
-# Ensure output folder exists
-output_dir = r"C:\Users\HariharaM12\PycharmProjects\Medical_Data\output"
+# Output directory for sentence files
+output_dir = r"C:\Users\HariharaM12\PycharmProjects\Med_Data\output\sentences"
 os.makedirs(output_dir, exist_ok=True)
 
-# File paths
-sentence_output_file = os.path.join(output_dir, 'extracted_sentences.json')
-structured_output_file = os.path.join(output_dir, 'structured_data.json')
+# Config and model
+config = load_config()
+model_name = config['gpt_models']['model_gpt4o']
+input_csv_path = r"C:\Users\HariharaM12\Downloads\medicaldata.csv"
 
-# Config
-openai_config = load_config()
-model = openai_config['gpt_models']['model_gpt4o']
-input_file = r"C:\Users\HariharaM12\Downloads\medicaldata.csv"
-
-# Results
-sentence_results = []
-structured_results = []
-
-def clean_json_response(response: str):
-    if not response or not isinstance(response, str):
+# Clean response
+def sanitize_json_response(raw_response: str):
+    if not raw_response or not isinstance(raw_response, str):
         return ""
-    cleaned = re.sub(r'```(?:json)?\n?|\n?```', '', response).strip()
-    cleaned = cleaned.replace('\n', ' ')
-    return cleaned
+    cleaned = re.sub(r'```(?:json)?\n?|\n?```', '', raw_response).strip()
+    return cleaned.replace('\n', ' ')
 
-# Read input CSV
-df = pd.read_csv(input_file, encoding='utf-8')
+# Clean file name
+def sanitize_filename(name: str) -> str:
+    return re.sub(r'[\\/*?:"<>|]', "_", name)
+
+# Load input CSV
+df = pd.read_csv(input_csv_path, encoding='utf-8')
 print(f"Total rows: {len(df)}")
 
-# Process only first 5 for testing
-for index, row in df.iloc[:5].iterrows():
-    title = row.get('title', "")
-    text = row.get('text', "")
-    print(f"\n Processing: {title[:50]}")
+# Process rows
+for idx, row in df.iloc[445:470].iterrows():
+    doc_title = row.get('title', f"doc_{idx}")
+    doc_text = row.get('text', "")
 
-    if not text:
+    if not doc_text:
         continue
 
-    # Step 1: Extract sentences
-    prompt1 = sentence_extraction_prompt(title, text)
-    extracted_sentences_raw = call_openai_api(prompt1, model)
+    print(f" Extracting sentences for: {doc_title[:60]}")
 
-    if not extracted_sentences_raw:
-        print("Sentence extraction failed")
+    prompt = build_sentence_prompt(doc_text)
+    response = call_openai_api(prompt, model_name)
+
+    if not response:
+        print(" No response from OpenAI.")
         continue
 
-    cleaned_sentences = clean_json_response(extracted_sentences_raw)
+    cleaned_response = sanitize_json_response(response)
+
     try:
-        extracted_sentences = json.loads(cleaned_sentences)
+        sentence_data = json.loads(cleaned_response)
+        sentence_data["document_title"] = doc_title
     except json.JSONDecodeError:
-        print("Sentence JSON parse error")
+        print("JSON parse error.")
         continue
 
-    sentence_results.append(extracted_sentences)
+    # Ensure unique file name by appending index
+    filename = sanitize_filename(f"{doc_title}_{idx}") + ".json"
+    file_path = os.path.join(output_dir, filename)
 
-    # Step 2: Structured extraction
-    combined_text = ". ".join(
-        extracted_sentences.get('aml_diagnosis_sentences', []) +
-        extracted_sentences.get('precedent_disease_sentences', []) +
-        extracted_sentences.get('performance_status_sentences', []) +
-        extracted_sentences.get('mutational_status_sentences', [])
-    )
-
-    prompt2 = field_extraction_prompt(combined_text)
-    structured_raw = call_openai_api(prompt2, model)
-
-    if not structured_raw:
-        print("Structured extraction failed")
-        continue
-
-    cleaned_structured = clean_json_response(structured_raw)
     try:
-        structured_data = json.loads(cleaned_structured)
-        structured_data["document_title"] = title
-        structured_results.append(structured_data)
-    except json.JSONDecodeError:
-        print("Structured JSON parse error")
-        continue
-
-# ✅ Save to files
-try:
-    with open(sentence_output_file, 'w', encoding='utf-8') as f:
-        json.dump(sentence_results, f, indent=4)
-    print(f"Saved sentence results → {sentence_output_file}")
-except Exception as e:
-    print(f"Error saving sentence file: {e}")
-
-try:
-    with open(structured_output_file, 'w', encoding='utf-8') as f:
-        json.dump(structured_results, f, indent=4)
-    print(f"✅ Saved structured results → {structured_output_file}")
-except Exception as e:
-    print(f"Error saving structured file: {e}")
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(sentence_data, f, indent=4)
+        print(f"Saved → {file_path}")
+    except Exception as e:
+        print(f"Error saving file: {e}")
